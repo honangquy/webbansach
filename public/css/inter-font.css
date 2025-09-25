@@ -1,0 +1,48 @@
+/* Inter Font Global Styles */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+* {
+    font-family: Inter, "Inter Placeholder", sans-serif !important;
+}
+
+html, body {
+    font-family: Inter, "Inter Placeholder", sans-serif !important;
+}
+
+/* Ensure all common elements use Inter font */
+h1, h2, h3, h4, h5, h6 {
+    font-family: Inter, "Inter Placeholder", sans-serif !important;
+}
+
+p, span, div, a, button, input, textarea, select {
+    font-family: Inter, "Inter Placeholder", sans-serif !important;
+}
+
+.btn, .form-control, .form-select, .form-check-label {
+    font-family: Inter, "Inter Placeholder", sans-serif !important;
+}
+
+/* Bootstrap overrides */
+.navbar-brand, .nav-link, .dropdown-item {
+    font-family: Inter, "Inter Placeholder", sans-serif !important;
+}
+
+/* Table styles */
+table, th, td {
+    font-family: Inter, "Inter Placeholder", sans-serif !important;
+}
+
+/* Card styles */
+.card-title, .card-text, .card-header {
+    font-family: Inter, "Inter Placeholder", sans-serif !important;
+}
+
+/* Alert styles */
+.alert {
+    font-family: Inter, "Inter Placeholder", sans-serif !important;
+}
+
+/* Badge styles */
+.badge {
+    font-family: Inter, "Inter Placeholder", sans-serif !important;
+}
