@@ -131,6 +131,8 @@
                 </div>
             </div>
 
+            {{-- Reviews are only allowed after order delivery. Review forms moved to order detail page. --}}
+
             <!-- Payment Information (if applicable) -->
             @if($order->payment_method == 'qr_code')
             <div class="card mb-4">

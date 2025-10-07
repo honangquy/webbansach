@@ -39,15 +39,37 @@ class CartController extends Controller
         $coupon = session('coupon');
         $discountAmount = 0;
         
-        if ($coupon && $total >= ($coupon['minimum_order_amount'] ?? 0)) {
-            if ($coupon['type'] === 'percentage') {
-                $discountAmount = ($total * $coupon['value']) / 100;
-            } else {
-                $discountAmount = $coupon['value'];
+        if ($coupon) {
+            // Determine eligible subtotal based on coupon's eligible_book_ids if present
+            $eligibleSubtotal = 0;
+            $eligibleBookIds = $coupon['eligible_book_ids'] ?? [];
+
+            foreach ($cart as $id => $details) {
+                $book = Book::find($id);
+                if ($book) {
+                    $price = $book->sale_price ?? $book->price;
+                    $lineTotal = $price * $details['quantity'];
+                    if (empty($eligibleBookIds) || in_array($book->id, $eligibleBookIds)) {
+                        $eligibleSubtotal += $lineTotal;
+                    }
+                }
             }
-            
-            // Update discount amount in session
-            session(['coupon.discount_amount' => $discountAmount]);
+
+            $validationAmount = empty($eligibleBookIds) ? $total : $eligibleSubtotal;
+
+            if ($validationAmount >= ($coupon['minimum_order_amount'] ?? 0)) {
+                if ($coupon['type'] === 'percentage') {
+                    $discountAmount = ($eligibleSubtotal ?: $total) * $coupon['value'] / 100;
+                } else {
+                    $discountAmount = min($coupon['value'], ($eligibleSubtotal ?: $total));
+                }
+
+                // Update discount amount in session
+                session(['coupon.discount_amount' => $discountAmount]);
+            } else {
+                // If not meeting minimum, ensure discount is zero
+                session(['coupon.discount_amount' => 0]);
+            }
         }
         
         return view('frontend.cart.index', compact('cartItems', 'total'));

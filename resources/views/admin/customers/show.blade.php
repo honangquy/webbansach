@@ -17,6 +17,23 @@
             <a href="{{ route('admin.customers.edit', $customer) }}" class="btn btn-primary">
                 <i class="fas fa-edit"></i> Chỉnh sửa
             </a>
+            @if($customer->role !== 'admin')
+                @if($customer->role === 'staff')
+                    <form action="{{ route('admin.customers.demote', $customer) }}" method="POST" class="d-inline">
+                        @csrf
+                        <button type="submit" class="btn btn-warning">
+                            <i class="fas fa-user-minus"></i> Gỡ quyền nhân viên
+                        </button>
+                    </form>
+                @else
+                    <form action="{{ route('admin.customers.promote', $customer) }}" method="POST" class="d-inline">
+                        @csrf
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-user-plus"></i> Nâng quyền thành nhân viên
+                        </button>
+                    </form>
+                @endif
+            @endif
         </div>
     </div>
 
@@ -36,6 +53,15 @@
                         </div>
                         <h5 class="mb-1">{{ $customer->name }}</h5>
                         <p class="text-muted mb-2">{{ $customer->email }}</p>
+                        <div class="mb-2">
+                            @if($customer->role === 'staff')
+                                <span class="badge bg-secondary">Nhân viên</span>
+                            @elseif($customer->role === 'admin')
+                                <span class="badge bg-dark">Admin</span>
+                            @else
+                                <span class="badge bg-light text-dark">Khách hàng</span>
+                            @endif
+                        </div>
                     </div>
 
                     <div class="row text-center">

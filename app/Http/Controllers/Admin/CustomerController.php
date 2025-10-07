@@ -21,7 +21,7 @@ class CustomerController extends Controller
      */
     public function index(Request $request)
     {
-        $query = User::where('role', 'customer')
+        $query = User::customers()
                     ->withOrderStats();
 
         // Search functionality
@@ -38,8 +38,9 @@ class CustomerController extends Controller
 
         // Statistics
         $stats = [
-            'total' => User::where('role', 'customer')->count(),
-            'new_this_month' => User::where('role', 'customer')
+            // Count both customers and staff so promoted users still count as customers in stats
+            'total' => User::whereIn('role', ['customer', 'staff'])->count(),
+            'new_this_month' => User::whereIn('role', ['customer', 'staff'])
                                    ->whereMonth('created_at', now()->month)
                                    ->whereYear('created_at', now()->year)
                                    ->count(),
@@ -51,9 +52,7 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-        $customer = User::where('role', 'customer')
-                       ->withOrderStats()
-                       ->findOrFail($id);
+        $customer = User::withOrderStats()->findOrFail($id);
 
         $recentOrders = Order::where('user_id', $id)
                             ->with('orderDetails')
@@ -76,7 +75,7 @@ class CustomerController extends Controller
      */
     public function edit($id)
     {
-        $customer = User::where('role', 'customer')->findOrFail($id);
+        $customer = User::findOrFail($id);
         return view('admin.customers.edit', compact('customer'));
     }
 
@@ -85,7 +84,7 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $customer = User::where('role', 'customer')->findOrFail($id);
+    $customer = User::findOrFail($id);
 
         $request->validate([
             'name' => 'required|string|max:255',
@@ -115,11 +114,38 @@ class CustomerController extends Controller
     }
 
     /**
+     * Promote a customer to staff
+     */
+    public function promoteToStaff(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        // Only allow promoting customers (or demoting back) via admin
+        $user->role = 'staff';
+        $user->save();
+
+        return redirect()->back()->with('success', 'Người dùng đã được nâng quyền thành nhân viên.');
+    }
+
+    /**
+     * Demote a staff to customer
+     */
+    public function demoteToCustomer(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $user->role = 'customer';
+        $user->save();
+
+        return redirect()->back()->with('success', 'Quyền nhân viên đã được gỡ bỏ.');
+    }
+
+    /**
      * Remove the specified customer
      */
     public function destroy($id)
     {
-        $customer = User::where('role', 'customer')->findOrFail($id);
+        // Allow deleting user if they are customer or staff
+        $customer = User::whereIn('role', ['customer', 'staff'])->findOrFail($id);
 
         // Check if customer has orders
         if ($customer->orders()->count() > 0) {

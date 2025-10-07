@@ -276,8 +276,70 @@ class AdminOrderController extends Controller
 
         $orders = $query->get();
 
+        // Prepare rows for export
+        $rows = [];
+        $rows[] = [
+            'Mã đơn hàng',
+            'Khách hàng',
+            'Email',
+            'Số điện thoại',
+            'Tổng tiền',
+            'Trạng thái',
+            'Phương thức thanh toán',
+            'Ngày đặt',
+            'Địa chỉ giao hàng'
+        ];
+
+        foreach ($orders as $order) {
+            $rows[] = [
+                $order->order_number,
+                $order->customer_name,
+                $order->customer_email,
+                $order->customer_phone,
+                number_format($order->total_amount),
+                $order->status,
+                $order->payment_method,
+                $order->created_at->format('d/m/Y H:i'),
+                $order->shipping_address
+            ];
+        }
+
+        // If PhpSpreadsheet is available, generate an actual XLSX file
+        if (class_exists('\PhpOffice\PhpSpreadsheet\Spreadsheet')) {
+            $filename = 'orders_' . now()->format('Y_m_d_H_i_s') . '.xlsx';
+
+            $callback = function() use ($rows) {
+                $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+                $sheet = $spreadsheet->getActiveSheet();
+
+                $rowNum = 1;
+                foreach ($rows as $row) {
+                    $colNum = 1;
+                    foreach ($row as $cell) {
+                        $sheet->setCellValueByColumnAndRow($colNum, $rowNum, $cell);
+                        $colNum++;
+                    }
+                    $rowNum++;
+                }
+
+                $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+                $writer->save('php://output');
+            };
+
+            $headers = [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+                'Pragma' => 'no-cache',
+                'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+                'Expires' => '0'
+            ];
+
+            return response()->stream($callback, 200, $headers);
+        }
+
+        // Fallback: CSV export (works in all environments)
         $filename = 'orders_' . now()->format('Y_m_d_H_i_s') . '.csv';
-        
+
         $headers = [
             'Content-type' => 'text/csv',
             'Content-Disposition' => 'attachment; filename=' . $filename,
@@ -286,37 +348,14 @@ class AdminOrderController extends Controller
             'Expires' => '0'
         ];
 
-        $callback = function() use ($orders) {
+        $callback = function() use ($rows) {
             $file = fopen('php://output', 'w');
-            
-            // UTF-8 BOM
-            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
-            
-            // Headers
-            fputcsv($file, [
-                'Mã đơn hàng',
-                'Khách hàng',
-                'Email',
-                'Số điện thoại', 
-                'Tổng tiền',
-                'Trạng thái',
-                'Phương thức thanh toán',
-                'Ngày đặt',
-                'Địa chỉ giao hàng'
-            ]);
 
-            foreach ($orders as $order) {
-                fputcsv($file, [
-                    $order->order_number,
-                    $order->customer_name,
-                    $order->customer_email,
-                    $order->customer_phone,
-                    number_format($order->total_amount),
-                    $order->status,
-                    $order->payment_method,
-                    $order->created_at->format('d/m/Y H:i'),
-                    $order->shipping_address
-                ]);
+            // UTF-8 BOM for Excel compatibility
+            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+
+            foreach ($rows as $row) {
+                fputcsv($file, $row);
             }
 
             fclose($file);

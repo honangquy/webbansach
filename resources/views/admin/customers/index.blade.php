@@ -161,14 +161,27 @@
                             <td>{{ $customer->id }}</td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <div class="avatar me-3">
-                                        <div class="avatar-initial bg-label-primary rounded">
-                                            {{ strtoupper(substr($customer->name, 0, 1)) }}
-                                        </div>
+                                    <div class="me-3">
+                                        @if($customer->avatar)
+                                            <img src="{{ asset('storage/' . $customer->avatar) }}" alt="{{ $customer->name }}" class="rounded-circle admin-customer-avatar">
+                                        @else
+                                            <div class="avatar-initial bg-label-primary rounded admin-customer-avatar-initial">
+                                                {{ strtoupper(substr($customer->name, 0, 1)) }}
+                                            </div>
+                                        @endif
                                     </div>
                                     <div>
                                         <h6 class="mb-0">{{ $customer->name }}</h6>
                                         <small class="text-muted">{{ $customer->email }}</small>
+                                        <div>
+                                            @if($customer->role === 'staff')
+                                                <span class="badge bg-secondary">Nhân viên</span>
+                                            @elseif($customer->role === 'admin')
+                                                <span class="badge bg-dark">Admin</span>
+                                            @else
+                                                <span class="badge bg-light text-dark">Khách hàng</span>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                             </td>
@@ -211,6 +224,27 @@
                                                 </button>
                                             </form>
                                         </li>
+                                        @endif
+
+                                        @if($customer->role !== 'admin')
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li class="px-3">
+                                                @if($customer->role === 'staff')
+                                                    <form action="{{ route('admin.customers.demote', $customer) }}" method="POST">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-sm btn-outline-warning w-100">
+                                                            <i class="fas fa-user-minus"></i> Gỡ quyền nhân viên
+                                                        </button>
+                                                    </form>
+                                                @else
+                                                    <form action="{{ route('admin.customers.promote', $customer) }}" method="POST">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-sm btn-outline-success w-100">
+                                                            <i class="fas fa-user-plus"></i> Nâng quyền thành nhân viên
+                                                        </button>
+                                                    </form>
+                                                @endif
+                                            </li>
                                         @endif
                                     </ul>
                                 </div>
@@ -280,6 +314,22 @@ function showAlert(type, message) {
 .avatar-initial {
     width: 40px;
     height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+}
+
+/* Admin customers avatar image */
+.admin-customer-avatar {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+}
+.admin-customer-avatar-initial {
+    width: 48px;
+    height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;

@@ -3,20 +3,7 @@
 <?php $__env->startSection('title', 'Trang chủ'); ?>
 
 <?php $__env->startSection('content'); ?>
-<!-- Hero Section -->
-<section class="hero-section bg-primary text-white py-5">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                <h1 class="display-4 fw-bold mb-3">HNQ BookStore</h1>
-                <p class="lead mb-4">Just a book shop :)</p>
-            </div>
-            <div class="col-lg-6 text-center">
-                <i class="fas fa-book-open fa-10x opacity-75"></i>
-            </div>
-        </div>
-    </div>
-</section>
+<?php echo $__env->make('frontend.partials.banner', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 <!-- Categories Section -->
 <section class="py-5 bg-light">
@@ -94,6 +81,34 @@
                                 <p class="text-muted small mb-2"><?php echo e($book->author); ?></p>
                                 <p class="text-primary small mb-2"><?php echo e($book->category->name); ?></p>
 
+                                
+                                <div class="mb-2">
+                                    <?php
+                                        $avg = $book->average_rating;
+                                        $count = $book->reviews()->count();
+                                    ?>
+                                    <?php if($avg): ?>
+                                        <div class="d-flex align-items-center">
+                                            <div class="me-2">
+                                                <?php for($i=1;$i<=5;$i++): ?>
+                                                    <?php if($i <= floor($avg)): ?>
+                                                        <i class="fas fa-star text-warning"></i>
+                                                    <?php elseif($i - $avg < 1 && $i - $avg > 0): ?>
+                                                        <i class="fas fa-star-half-alt text-warning"></i>
+                                                    <?php else: ?>
+                                                        <i class="far fa-star text-warning"></i>
+                                                    <?php endif; ?>
+                                                <?php endfor; ?>
+                                            </div>
+                                            <div class="small text-muted">
+                                                (<?php echo e($count); ?> đánh giá)
+                                            </div>
+                                        </div>
+                                    <?php else: ?>
+                                        <span class="text-muted small">Chưa có đánh giá</span>
+                                    <?php endif; ?>
+                                </div>
+
                                 <div class="mt-auto">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
@@ -165,6 +180,34 @@
                         <p class="text-muted small mb-2"><?php echo e($book->author); ?></p>
                         <p class="text-primary small mb-2"><?php echo e($book->category->name); ?></p>
                         
+                        
+                        <div class="mb-2">
+                            <?php
+                                $avg = $book->average_rating;
+                                $count = $book->reviews()->count();
+                            ?>
+                            <?php if($avg): ?>
+                                <div class="d-flex align-items-center">
+                                    <div class="me-2">
+                                        <?php for($i=1;$i<=5;$i++): ?>
+                                            <?php if($i <= floor($avg)): ?>
+                                                <i class="fas fa-star text-warning"></i>
+                                            <?php elseif($i - $avg < 1 && $i - $avg > 0): ?>
+                                                <i class="fas fa-star-half-alt text-warning"></i>
+                                            <?php else: ?>
+                                                <i class="far fa-star text-warning"></i>
+                                            <?php endif; ?>
+                                        <?php endfor; ?>
+                                    </div>
+                                    <div class="small text-muted">
+                                        (<?php echo e($count); ?> đánh giá)
+                                    </div>
+                                </div>
+                            <?php else: ?>
+                                <span class="text-muted small">Chưa có đánh giá</span>
+                            <?php endif; ?>
+                        </div>
+
                         <div class="mt-auto">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>

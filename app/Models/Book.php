@@ -51,6 +51,25 @@ class Book extends Model
         return $this->hasMany(OrderDetail::class);
     }
 
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    /**
+     * Get average rating (float) for the book, or null if no reviews.
+     */
+    public function getAverageRatingAttribute()
+    {
+        if ($this->relationLoaded('reviews')) {
+            $avg = $this->reviews->avg('rating');
+        } else {
+            $avg = $this->reviews()->avg('rating');
+        }
+
+        return $avg ? round($avg, 2) : null;
+    }
+
     // Scopes
     public function scopeActive($query)
     {

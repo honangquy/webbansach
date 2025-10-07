@@ -18,7 +18,7 @@ class AdminController extends Controller
         $totalBooks = \App\Models\Book::count();
         $totalCategories = \App\Models\Category::count();
         $totalOrders = \App\Models\Order::count();
-        $totalCustomers = \App\Models\User::where('role', 'customer')->count();
+    $totalCustomers = \App\Models\User::whereIn('role', ['customer', 'staff'])->count();
         
         $recentOrders = \App\Models\Order::with('user')
             ->orderBy('created_at', 'desc')

@@ -7,9 +7,14 @@
     <h1 class="h3 mb-0">
         <i class="fas fa-users me-2"></i>Thống kê khách hàng
     </h1>
-    <a href="{{ route('admin.statistics.index') }}" class="btn btn-outline-secondary">
-        <i class="fas fa-arrow-left"></i> Quay lại
-    </a>
+    <div class="d-flex gap-2">
+        <a href="{{ route('admin.statistics.index') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> Quay lại
+        </a>
+        <a href="#" id="exportCsvBtn" class="btn btn-outline-success">
+            <i class="fas fa-file-csv"></i> Xuất CSV
+        </a>
+    </div>
 </div>
 
 <!-- Customer Stats Cards -->
@@ -175,6 +180,13 @@ const registrationChart = new Chart(registrationCtx, {
             }
         }
     }
+});
+</script>
+<script>
+// Export CSV for customers
+document.getElementById('exportCsvBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    window.open('{{ route("admin.statistics.export") }}?loai=customers', '_blank');
 });
 </script>
 @endsection

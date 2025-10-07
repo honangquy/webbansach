@@ -72,7 +72,7 @@
                                     @error('minimum_order_amount')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
-                                    <small class="form-text text-muted">Để trống nếu không có yêu cầu tối thiểu</small>
+                                    <small class="form-text text-muted">Để trống nếu không có yêu cầu tối thiể u</small>
                                 </div>
                             </div>
                         </div>

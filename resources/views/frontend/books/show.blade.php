@@ -99,6 +99,83 @@
                     
                     <hr>
 
+                    {{-- Rating summary --}}
+                    <div class="mb-4">
+                        @php
+                            $avg = $book->average_rating;
+                            $count = $book->reviews()->where('approved', true)->count();
+                            $reviews = $book->reviews()->where('approved', true)->with('user')->latest()->get();
+                        @endphp
+                        <h6 class="fw-bold">Đánh giá</h6>
+                        @if($avg)
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="me-3">
+                                    <span class="h4 text-warning mb-0">{{ number_format($avg, 1) }}</span>
+                                </div>
+                                <div>
+                                    @for($i = 1; $i <= 5; $i++)
+                                        @if($i <= floor($avg))
+                                            <i class="fas fa-star text-warning"></i>
+                                        @elseif($i - $avg < 1 && $i - $avg > 0)
+                                            <i class="fas fa-star-half-alt text-warning"></i>
+                                        @else
+                                            <i class="far fa-star text-warning"></i>
+                                        @endif
+                                    @endfor
+                                </div>
+                                <div class="ms-3 small text-muted">({{ $count }} đánh giá)</div>
+                            </div>
+                        @else
+                            <div class="text-muted">Chưa có đánh giá cho sản phẩm này.</div>
+                        @endif
+
+                        {{-- Reviews list --}}
+                        @if($reviews->count() > 0)
+                            <div class="mt-3">
+                                @foreach($reviews as $r)
+                                    <div class="border rounded p-3 mb-2">
+                                        <div class="d-flex align-items-start gap-3">
+                                            {{-- Avatar column --}}
+                                            <div class="flex-shrink-0">
+                                                @if($r->user && $r->user->avatar)
+                                                    <img src="{{ asset('storage/' . $r->user->avatar) }}" alt="{{ $r->user->name }}" class="rounded-circle review-avatar">
+                                                @else
+                                                    @php
+                                                        $initial = $r->user && $r->user->name ? strtoupper(substr($r->user->name, 0, 1)) : 'K';
+                                                    @endphp
+                                                    <div class="review-avatar-initial rounded-circle text-white d-flex align-items-center justify-content-center">{{ $initial }}</div>
+                                                @endif
+                                            </div>
+
+                                            {{-- Content column --}}
+                                            <div class="flex-grow-1">
+                                                <div class="d-flex justify-content-between align-items-start">
+                                                    <div>
+                                                        <strong>{{ $r->user ? $r->user->name : 'Khách hàng' }}</strong>
+                                                        <div class="small text-muted">{{ $r->created_at->format('d/m/Y') }}</div>
+                                                    </div>
+                                                    <div class="ms-3">
+                                                        @for($i=1;$i<=5;$i++)
+                                                            @if($i <= $r->rating)
+                                                                <i class="fas fa-star text-warning"></i>
+                                                            @else
+                                                                <i class="far fa-star text-warning"></i>
+                                                            @endif
+                                                        @endfor
+                                                    </div>
+                                                </div>
+
+                                                @if($r->comment)
+                                                    <div class="mt-2">{!! nl2br(e($r->comment)) !!}</div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
+
                     <!-- Book Info Table -->
                     <div class="mb-4">
                         <h5 class="fw-bold mb-3">Thông tin chi tiết</h5>
@@ -146,8 +223,21 @@
                         <h5 class="mb-0 fw-bold">Mô tả sản phẩm</h5>
                     </div>
                     <div class="card-body">
-                        <div class="book-description">
-                            {!! nl2br(e($book->description)) !!}
+                        <div class="book-description-wrapper position-relative">
+                            <div id="bookDescriptionTruncate" class="description-truncate">
+                                <?php
+                                    // Split description into paragraphs on empty lines and output <p> blocks
+                                    $desc = trim($book->description);
+                                    $paras = preg_split('/\r\n\r\n|\n\n|\r\r/', $desc);
+                                ?>
+                                @foreach($paras as $p)
+                                    <p class="desc-paragraph">{!! nl2br(e(trim($p))) !!}</p>
+                                @endforeach
+                            </div>
+                            <div id="descriptionFade" class="description-fade"></div>
+                            <div class="text-center mt-3">
+                                <a href="#" id="toggleDescription" class="toggle-desc">Xem thêm</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -232,6 +322,53 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// Description expand/collapse
+document.addEventListener('DOMContentLoaded', function() {
+    const desc = document.getElementById('bookDescriptionTruncate');
+    const toggle = document.getElementById('toggleDescription');
+    const fade = document.getElementById('descriptionFade');
+    if (!desc || !toggle) return;
+
+    const collapsedHeight = 180; // px - adjust to desired preview height
+    // Initialize
+    function setCollapsed() {
+        desc.style.maxHeight = collapsedHeight + 'px';
+        desc.style.overflow = 'hidden';
+        fade.style.display = 'block';
+        toggle.innerText = 'Xem thêm';
+        toggle.setAttribute('data-expanded', 'false');
+    }
+
+    function setExpanded() {
+        desc.style.maxHeight = desc.scrollHeight + 'px';
+        desc.style.overflow = 'visible';
+        fade.style.display = 'none';
+        toggle.innerText = 'Thu gọn';
+        toggle.setAttribute('data-expanded', 'true');
+    }
+
+    // If text is short, hide toggle
+    if (desc.scrollHeight <= collapsedHeight) {
+        toggle.style.display = 'none';
+        fade.style.display = 'none';
+        desc.style.maxHeight = 'none';
+    } else {
+        setCollapsed();
+    }
+
+    toggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        const expanded = toggle.getAttribute('data-expanded') === 'true';
+        if (expanded) {
+            setCollapsed();
+            // smooth scroll to keep header in view
+            desc.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+            setExpanded();
+        }
+    });
+});
 </script>
 @endpush
 
@@ -250,8 +387,44 @@ document.addEventListener('DOMContentLoaded', function() {
         line-height: 1.8;
         color: #495057;
     }
+    .book-description-wrapper { position: relative; }
+    .description-truncate {
+        transition: max-height 400ms ease;
+        overflow: hidden;
+        max-height: 180px; /* default collapsed */
+    }
+    .description-truncate p.desc-paragraph {
+        margin: 0 0 0.9rem 0; /* tighten paragraph spacing */
+        line-height: 1.8;
+    }
+    .description-fade {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 30px; /* leave space for the toggle link */
+        height: 50px;
+        background: linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,1));
+        pointer-events: none;
+    }
+    .toggle-desc {
+        cursor: pointer;
+        color: #0d6efd;
+        text-decoration: none;
+    }
     .table-striped > tbody > tr:nth-of-type(odd) > * {
         background-color: rgba(0,0,0,.02);
+    }
+    /* Review avatar styles */
+    .review-avatar {
+        width: 56px;
+        height: 56px;
+        object-fit: cover;
+    }
+    .review-avatar-initial {
+        width: 56px;
+        height: 56px;
+        background: #6c757d; /* secondary */
+        font-weight: 600;
     }
 </style>
 @endpush

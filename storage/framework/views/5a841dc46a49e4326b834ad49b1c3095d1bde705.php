@@ -405,7 +405,7 @@ function bulkUpdateStatus(status) {
 
 function exportOrders() {
     const params = new URLSearchParams(window.location.search);
-    window.open('http://localhost/webbansach/laravel-app/public/admin/orders/export?' + params.toString());
+    window.open('<?php echo e(route('admin.orders.export')); ?>' + '?' + params.toString());
 }
 
 function printOrder(orderId) {

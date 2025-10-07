@@ -3,20 +3,7 @@
 @section('title', 'Trang chủ')
 
 @section('content')
-<!-- Hero Section -->
-<section class="hero-section bg-primary text-white py-5">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                <h1 class="display-4 fw-bold mb-3">HNQ BookStore</h1>
-                <p class="lead mb-4">Just a book shop :)</p>
-            </div>
-            <div class="col-lg-6 text-center">
-                <i class="fas fa-book-open fa-10x opacity-75"></i>
-            </div>
-        </div>
-    </div>
-</section>
+@include('frontend.partials.banner')
 
 <!-- Categories Section -->
 <section class="py-5 bg-light">
@@ -94,6 +81,34 @@
                                 <p class="text-muted small mb-2">{{ $book->author }}</p>
                                 <p class="text-primary small mb-2">{{ $book->category->name }}</p>
 
+                                {{-- Rating display --}}
+                                <div class="mb-2">
+                                    @php
+                                        $avg = $book->average_rating;
+                                        $count = $book->reviews()->count();
+                                    @endphp
+                                    @if($avg)
+                                        <div class="d-flex align-items-center">
+                                            <div class="me-2">
+                                                @for($i=1;$i<=5;$i++)
+                                                    @if($i <= floor($avg))
+                                                        <i class="fas fa-star text-warning"></i>
+                                                    @elseif($i - $avg < 1 && $i - $avg > 0)
+                                                        <i class="fas fa-star-half-alt text-warning"></i>
+                                                    @else
+                                                        <i class="far fa-star text-warning"></i>
+                                                    @endif
+                                                @endfor
+                                            </div>
+                                            <div class="small text-muted">
+                                                ({{ $count }} đánh giá)
+                                            </div>
+                                        </div>
+                                    @else
+                                        <span class="text-muted small">Chưa có đánh giá</span>
+                                    @endif
+                                </div>
+
                                 <div class="mt-auto">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
@@ -165,6 +180,34 @@
                         <p class="text-muted small mb-2">{{ $book->author }}</p>
                         <p class="text-primary small mb-2">{{ $book->category->name }}</p>
                         
+                        {{-- Rating display --}}
+                        <div class="mb-2">
+                            @php
+                                $avg = $book->average_rating;
+                                $count = $book->reviews()->count();
+                            @endphp
+                            @if($avg)
+                                <div class="d-flex align-items-center">
+                                    <div class="me-2">
+                                        @for($i=1;$i<=5;$i++)
+                                            @if($i <= floor($avg))
+                                                <i class="fas fa-star text-warning"></i>
+                                            @elseif($i - $avg < 1 && $i - $avg > 0)
+                                                <i class="fas fa-star-half-alt text-warning"></i>
+                                            @else
+                                                <i class="far fa-star text-warning"></i>
+                                            @endif
+                                        @endfor
+                                    </div>
+                                    <div class="small text-muted">
+                                        ({{ $count }} đánh giá)
+                                    </div>
+                                </div>
+                            @else
+                                <span class="text-muted small">Chưa có đánh giá</span>
+                            @endif
+                        </div>
+
                         <div class="mt-auto">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>

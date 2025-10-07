@@ -17,7 +17,7 @@ class AdminUserSeeder extends Seeder
         \App\Models\User::create([
             'name' => 'Admin',
             'email' => 'admin@webbansach.com',
-            'password' => \Hash::make('honangquy'),
+            'password' => \Hash::make('password'),
             'role' => 'admin',
             'phone' => '0123456789',
             'address' => 'Hà Nội, Việt Nam'

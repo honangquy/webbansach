@@ -46,62 +46,109 @@
             min-height: 100vh;
             background-color: #f8f9fa; /* Light gray background */
             font-family: 'Inter', sans-serif; /* Set Inter as the default font */
+            padding-top: 0 !important; /* Remove default padding since navbar is centered */
         }
 
         main {
             flex: 1;
+            padding-top: 1rem;
         }
 
-        /* Navbar improvements */
+        /* Navbar improvements - Centered Floating Navbar (Flat semi-transparent blue) */
+
+        /* Slimmer centered navbar */
         .navbar {
-            transition: background-color 0.3s ease-in-out;
+            background-color: rgba(33, 150, 243, 0.65) !important;
+            backdrop-filter: blur(10px) saturate(110%) !important;
+            -webkit-backdrop-filter: blur(10px) saturate(110%) !important;
+            box-shadow: 0 6px 22px rgba(13, 71, 161, 0.10) !important;
+            border: 1px solid rgba(33, 150, 243, 0.10) !important;
+            border-radius: 12px !important; /* slightly smaller radius */
+            margin: 0.6rem auto !important; /* less vertical spacing */
+            max-width: 98% !important;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .navbar .container-fluid {
+            padding: 0.22rem 1rem; /* reduced vertical padding to lower navbar height */
         }
 
         .navbar-brand {
-            font-weight: 700; /* Bolder brand */
-            font-size: 1.5rem;
-            color: #1a202c !important;
+            font-weight: 800;
+            font-size: 1.25rem; /* slightly smaller to help reduce height */
+            color: rgba(255,255,255,0.98) !important;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.14);
+            letter-spacing: 0.2px;
+            padding-top: 0.08rem; padding-bottom: 0.08rem;
+            line-height: 1;
         }
 
         .nav-link {
-            font-weight: 500;
-            color: #4a5568 !important;
-            transition: color 0.2s ease-in-out;
+            font-weight: 700;
+            color: rgba(255,255,255,0.95) !important;
+            transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
-            padding-bottom: 0.5rem;
+            padding: 0.28rem 0.6rem; /* tighter vertical/horizontal padding */
+            border-radius: 6px;
+            margin: 0 0.15rem;
+            font-size: 0.92rem; /* slightly smaller text */
+            line-height: 1.1;
         }
 
-        .nav-link:hover, .nav-link.active {
-            color: #0d6efd !important; /* Bootstrap primary blue */
+        .nav-link:hover {
+            color: #ffffff !important;
+            background: rgba(255,255,255,0.06);
+            transform: translateY(-1px);
+        }
+
+        .nav-link.active {
+            color: #ffffff !important;
+            background: rgba(255,255,255,0.09);
+            box-shadow: 0 2px 8px rgba(255,255,255,0.06);
         }
 
         .nav-link.active::after {
             content: '';
             position: absolute;
             bottom: 0;
-            left: 0.5rem;
-            right: 0.5rem;
-            height: 2px;
-            background-color: #0d6efd;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 3px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 2px;
         }
         
         .search-form .form-control {
             border-radius: 20px;
-            border-right: 0;
-            border-color: #ced4da;
+            border: 1px solid rgba(255, 193, 7, 0.28);
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(8px);
+            padding: 0.35rem 0.85rem; /* smaller input height */
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+        }
+        
+        .search-form .form-control:focus {
+            border-color: #ffc107;
+            box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.15);
+            background: rgba(255, 255, 255, 0.9);
         }
         
         .search-form .btn {
             border-radius: 20px;
-            border-left: 0;
-            margin-left: -40px;
+            margin-left: -36px; /* tighter overlap with input */
             z-index: 10;
             background: transparent;
-            color: #6c757d;
+            color: #8b6914;
             border: none;
+            transition: all 0.2s ease;
+            padding: 0.28rem 0.5rem;
         }
+        
         .search-form .btn:hover {
-            color: #0d6efd;
+            color: #6b5416;
+            transform: scale(1.1);
         }
 
         .navbar-nav .nav-item.dropdown {
@@ -109,15 +156,50 @@
         }
 
         .navbar-nav .dropdown-menu {
-            border-radius: 0.5rem;
-            border: 1px solid #e9ecef;
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
-            position: absolute; /* Ensure absolute positioning */
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            position: absolute;
+            margin-top: 0.5rem;
         }
 
         .dropdown-menu-end {
             right: 0;
             left: auto;
+        }
+        
+        .dropdown-item {
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            margin: 0.2rem 0.5rem;
+        }
+        
+        .dropdown-item:hover {
+            background: rgba(255, 193, 7, 0.15);
+            color: #8b6914;
+            transform: translateX(5px);
+        }
+
+        /* Cart badge style */
+        .badge.bg-danger {
+            background: linear-gradient(135deg, #ff9800, #ffc107) !important;
+            box-shadow: 0 2px 8px rgba(255, 152, 0, 0.4);
+        }
+
+        /* Navbar toggler for mobile */
+        .navbar-toggler {
+            border-color: rgba(139, 105, 20, 0.3);
+            color: #8b6914;
+        }
+        
+        .navbar-toggler:focus {
+            box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+        }
+        
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(139, 105, 20, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
         }
 
         .dropdown-item {
@@ -311,7 +393,75 @@
         }
     </style>
     <?php echo $__env->yieldPushContent('styles'); ?>
-    
+
+    <!-- Navbar responsive tweaks -->
+    <style>
+        /* Responsive adjustments for centered navbar */
+        @media (max-width: 1200px) {
+            .navbar {
+                max-width: 98% !important;
+                margin: 0.5rem auto !important;
+            }
+        }
+        
+        /* Slightly smaller brand on tablets/phones */
+        @media (max-width: 991.98px) {
+            .navbar-brand { font-size: 1.25rem !important; }
+            .navbar {
+                max-width: 98% !important;
+                margin: 0.5rem auto !important;
+                border-radius: 16px !important;
+            }
+        }
+
+        /* When navbar collapses on smaller screens, make the collapse area more usable */
+        @media (max-width: 991.98px) {
+            .navbar-collapse { 
+                padding: 0.65rem 1rem; 
+                background: rgba(255, 255, 255, 0.9);
+                border-radius: 12px;
+                margin-top: 0.5rem;
+            }
+            .search-form { width:100%; display:flex; margin: .5rem 0; }
+            .search-form .form-control { flex:1; width: 100%; }
+            .search-form .btn { margin-left: .5rem; }
+            .navbar-nav.me-auto { width:100%; }
+            .navbar-nav.me-auto .nav-item { width:100%; }
+            .navbar-nav.me-auto .nav-link { padding:.5rem 0.75rem; }
+            .navbar-nav { align-items: stretch; }
+            .navbar-nav .nav-item { text-align:left; }
+            /* Make dropdown menus full width inside collapsed navbar */
+            .navbar-nav .dropdown-menu { position: static; float: none; width: 100%; box-shadow: none; border: none; }
+        }
+
+        /* Adjust cart badge on very small screens */
+        @media (max-width: 576px) {
+            .cart-badge { right: -6px !important; top: 6px !important; transform: none !important; }
+            .search-form .btn { margin-left: 6px; }
+        }
+    </style>
+
+    <!-- Clamp pagination and SVG/icon sizes to avoid oversized chevrons -->
+    <style>
+        .pagination svg,
+        .pagination i,
+        .page-link svg,
+        .page-link i,
+        .ui.pagination .icon,
+        .ui.pagination i {
+            width: 1em !important;
+            height: 1em !important;
+            font-size: 1em !important;
+            display: inline-block !important;
+            vertical-align: middle !important;
+        }
+
+        .pagination .page-link, .pagination a, .pagination span {
+            line-height: 1;
+            padding: .35rem .6rem !important;
+        }
+    </style>
+
     <!-- Remove the aggressive font override -->
     <style>
         /* All font styles are now handled by the body font-family and Bootstrap defaults */
@@ -319,7 +469,7 @@
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="<?php echo e(route('home')); ?>">
                  HNQ BookStore
@@ -337,6 +487,12 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <?php echo e(request()->routeIs('books.*') ? 'active' : ''); ?>" href="<?php echo e(route('books.index')); ?>">Sách</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?php echo e(request()->routeIs('about') ? 'active' : ''); ?>" href="<?php echo e(route('about')); ?>">Giới thiệu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?php echo e(request()->routeIs('contact') ? 'active' : ''); ?>" href="<?php echo e(route('contact')); ?>">Liên hệ</a>
                     </li>
                 </ul>
                 
@@ -381,7 +537,7 @@
                                 <li><a class="dropdown-item" href="<?php echo e(route('orders.index')); ?>">
                                     <i class="fas fa-shopping-bag"></i> Đơn hàng của tôi
                                 </a></li>
-                                <?php if(Auth::user()->isAdmin()): ?>
+                                <?php if(Auth::user()->isAdmin() || (method_exists(Auth::user(), 'isStaff') && Auth::user()->isStaff())): ?>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="<?php echo e(route('admin.dashboard')); ?>">
                                         <i class="fas fa-cogs"></i> Quản trị

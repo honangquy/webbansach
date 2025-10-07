@@ -164,6 +164,34 @@
                                 </h6>
                                 <p class="text-muted small mb-2">{{ $book->author }}</p>
                                 <p class="text-primary small mb-2">{{ $book->category->name }}</p>
+
+                                {{-- Rating display --}}
+                                <div class="mb-2">
+                                    @php
+                                        $avg = $book->average_rating;
+                                        $count = $book->reviews()->count();
+                                    @endphp
+                                    @if($avg)
+                                        <div class="d-flex align-items-center">
+                                            <div class="me-2">
+                                                @for($i=1;$i<=5;$i++)
+                                                    @if($i <= floor($avg))
+                                                        <i class="fas fa-star text-warning"></i>
+                                                    @elseif($i - $avg < 1 && $i - $avg > 0)
+                                                        <i class="fas fa-star-half-alt text-warning"></i>
+                                                    @else
+                                                        <i class="far fa-star text-warning"></i>
+                                                    @endif
+                                                @endfor
+                                            </div>
+                                            <div class="small text-muted">
+                                                ({{ $count }} đánh giá)
+                                            </div>
+                                        </div>
+                                    @else
+                                        <span class="text-muted small">Chưa có đánh giá</span>
+                                    @endif
+                                </div>
                                 
                                 <div class="mt-auto">
                                     <div class="d-flex justify-content-between align-items-center">

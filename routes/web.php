@@ -14,7 +14,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Frontend Routes
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home'); 
+
+// About and Contact Pages
+Route::get('/about', [App\Http\Controllers\Frontend\PageController::class, 'about'])->name('about');
+Route::get('/contact', [App\Http\Controllers\Frontend\PageController::class, 'contact'])->name('contact');
+Route::post('/contact', [App\Http\Controllers\Frontend\PageController::class, 'sendContact'])->name('contact.send');
 
 // Test route
 Route::get('/test-admin-books', function() {
@@ -25,7 +30,7 @@ Route::get('/test-admin-books', function() {
 Route::get('/admin-login', function() {
     $user = App\Models\User::where('email', 'admin@webbansach.com')->first();
     if ($user) {
-        Auth::login($user);
+        Auth::login($user);  
         return redirect()->route('admin.books.index')->with('success', 'Logged in as admin');
     }
     return 'Admin user not found';
@@ -54,6 +59,8 @@ Route::prefix('orders')->name('orders.')->middleware('auth')->group(function () 
     Route::get('/{order}', [App\Http\Controllers\Frontend\OrderController::class, 'show'])->name('show');
     Route::post('/{order}/cancel', [App\Http\Controllers\Frontend\OrderController::class, 'cancel'])->name('cancel');
     Route::post('/{order}/reorder', [App\Http\Controllers\Frontend\OrderController::class, 'reorder'])->name('reorder');
+    // Reviews: post a review for a book in this order
+    Route::post('/{order}/reviews', [App\Http\Controllers\Frontend\ReviewController::class, 'store'])->name('reviews.store');
 });
 
 // Coupon Routes
@@ -220,7 +227,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
             'success' => true, 
             'message' => 'Test route works',
             'user' => auth()->user() ? auth()->user()->toArray() : null,
-            'is_admin' => auth()->user() ? auth()->user()->isAdmin() : false
+            'is_admin' => auth()->user() ? (auth()->user()->isAdmin() || (method_exists(auth()->user(), 'isStaff') && auth()->user()->isStaff())) : false
         ]);
     })->name('test.route');
     
@@ -233,18 +240,25 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     // Customers management routes
     Route::resource('customers', App\Http\Controllers\Admin\CustomerController::class);
     Route::get('/customers/stats', [App\Http\Controllers\Admin\CustomerController::class, 'getStats'])->name('customers.stats');
+    // Promote/Demote
+    Route::post('/customers/{customer}/promote', [App\Http\Controllers\Admin\CustomerController::class, 'promoteToStaff'])->name('customers.promote');
+    Route::post('/customers/{customer}/demote', [App\Http\Controllers\Admin\CustomerController::class, 'demoteToCustomer'])->name('customers.demote');
     
     // Orders management routes
     Route::get('/orders', [App\Http\Controllers\Admin\AdminOrderController::class, 'index'])->name('orders.index');
-    Route::get('/orders/{order}', [App\Http\Controllers\Admin\AdminOrderController::class, 'show'])->name('orders.show');
+    // Static/non-parameter routes should be declared before the parameterized ones
+    Route::get('/orders/export', [App\Http\Controllers\Admin\AdminOrderController::class, 'export'])->name('orders.export');
+    Route::post('/orders/bulk-update', [App\Http\Controllers\Admin\AdminOrderController::class, 'bulkUpdateStatus'])->name('orders.bulk-update');
+    Route::get('/orders/stats', [App\Http\Controllers\Admin\AdminOrderController::class, 'getStats'])->name('orders.stats');
     Route::get('/orders/{order}/print', [App\Http\Controllers\Admin\AdminOrderController::class, 'print'])->name('orders.print');
     Route::post('/orders/{order}/update-status', [App\Http\Controllers\Admin\AdminOrderController::class, 'updateStatus'])->name('orders.update-status');
-    Route::post('/orders/bulk-update', [App\Http\Controllers\Admin\AdminOrderController::class, 'bulkUpdateStatus'])->name('orders.bulk-update');
-    Route::get('/orders/export', [App\Http\Controllers\Admin\AdminOrderController::class, 'export'])->name('orders.export');
-    Route::get('/orders/stats', [App\Http\Controllers\Admin\AdminOrderController::class, 'getStats'])->name('orders.stats');
+    Route::get('/orders/{order}', [App\Http\Controllers\Admin\AdminOrderController::class, 'show'])->name('orders.show');
     
     // Coupons management routes
     Route::resource('coupons', App\Http\Controllers\Admin\AdminCouponController::class);
+
+    // Banners management routes
+    Route::resource('banners', App\Http\Controllers\Admin\BannerController::class);
     
     // Statistics routes
     Route::prefix('statistics')->name('statistics.')->group(function () {
@@ -253,5 +267,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
         Route::get('/customers', [App\Http\Controllers\Admin\AdminStatisticsController::class, 'customers'])->name('customers');
         Route::get('/products', [App\Http\Controllers\Admin\AdminStatisticsController::class, 'products'])->name('products');
         Route::get('/chart-data', [App\Http\Controllers\Admin\AdminStatisticsController::class, 'getChartData'])->name('chart-data');
+        // Export statistics as CSV
+        Route::get('/export', [App\Http\Controllers\Admin\AdminStatisticsController::class, 'export'])->name('export');
     });
 });

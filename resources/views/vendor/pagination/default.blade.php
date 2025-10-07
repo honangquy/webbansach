@@ -1,4 +1,9 @@
 @if ($paginator->hasPages())
+    <style>
+        /* Defensive rule for pagination icons to avoid large chevrons on some pages */
+        .pagination svg, .pagination i, .pagination-icon { width: 1em !important; height: 1em !important; font-size: 1em !important; vertical-align: middle; display: inline-block; }
+        .pagination { line-height: 1; }
+    </style>
     <nav>
         <ul class="pagination">
             {{-- Previous Page Link --}}

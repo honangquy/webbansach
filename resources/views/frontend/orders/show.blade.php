@@ -220,6 +220,69 @@
                 </div>
             </div>
             @endif
+            
+            @auth
+                @if($order->status == 'delivered')
+                <!-- Allow reviews only when order delivered -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0"><i class="fas fa-star text-warning"></i> Viết nhận xét cho sản phẩm </h6>
+                    </div>
+                    <div class="card-body">
+                        @foreach($order->orderDetails as $detail)
+                            @php
+                                $already = \App\Models\Review::where('order_id', $order->id)
+                                    ->where('book_id', $detail->book_id)
+                                    ->where('user_id', auth()->id())
+                                    ->exists();
+                            @endphp
+
+                            <div class="mb-3 border-bottom pb-3">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="me-3">
+                                        <img src="{{ $detail->book->image_url }}" alt="" style="width:60px;height:60px;object-fit:cover;border-radius:4px;">
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1">{{ $detail->book->title }}</h6>
+                                        <small class="text-muted">Số lượng: {{ $detail->quantity }}</small>
+                                    </div>
+                                </div>
+
+                                @if($already)
+                                    <div class="alert alert-secondary">Bạn đã đánh giá sản phẩm này cho đơn hàng này.</div>
+                                @else
+                                    <form method="POST" action="{{ route('orders.reviews.store', $order) }}">
+                                        @csrf
+                                        <input type="hidden" name="order_id" value="{{ $order->id }}">
+                                        <input type="hidden" name="book_id" value="{{ $detail->book->id }}">
+
+                                        <div class="mb-2">
+                                            <label class="form-label fw-bold">Đánh giá:</label>
+                                            <div class="star-select" data-target-input="rating-{{ $detail->book->id }}">
+                                                @for($i=1;$i<=5;$i++)
+                                                    <i class="far fa-star fa-2x star" data-value="{{ $i }}" style="cursor:pointer;color:#ccc;margin-right:6px;"></i>
+                                                @endfor
+                                            </div>
+                                            <input type="hidden" id="rating-{{ $detail->book->id }}" name="rating" value="5">
+                                        </div>
+
+                                        <div class="mb-2">
+                                            <label class="form-label">Nhận xét (không bắt buộc)</label>
+                                            <textarea name="comment" class="form-control" rows="3" placeholder="Viết nhận xét của bạn..."></textarea>
+                                        </div>
+
+                                        <div class="d-flex gap-2">
+                                            <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+                                            <a href="{{ route('books.show', $detail->book->id) }}" class="btn btn-outline-secondary">Xem sản phẩm</a>
+                                        </div>
+                                    </form>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+            @endauth
         </div>
 
         <!-- Order Summary -->
@@ -484,6 +547,31 @@ function reorder() {
 function trackOrder() {
     showAlert('info', 'Tính năng theo dõi đơn hàng sẽ được cập nhật sớm!');
 }
+
+// star-select init (for review star pickers on this page)
+$(document).ready(function() {
+    $('.star-select').each(function() {
+        const container = $(this);
+        const target = $('#' + container.data('target-input'));
+        container.find('.star').on('mouseenter', function() {
+            const val = parseInt($(this).data('value'));
+            container.find('.star').each(function() {
+                const v = parseInt($(this).data('value'));
+                $(this).toggleClass('far', v > val).toggleClass('fas', v <= val).css('color', v <= val ? '#ffc107' : '#ccc');
+            });
+        }).on('mouseleave', function() {
+            const cur = parseInt(target.val());
+            container.find('.star').each(function() {
+                const v = parseInt($(this).data('value'));
+                $(this).toggleClass('far', v > cur).toggleClass('fas', v <= cur).css('color', v <= cur ? '#ffc107' : '#ccc');
+            });
+        }).on('click', function() {
+            const val = $(this).data('value');
+            target.val(val);
+        });
+        container.trigger('mouseleave');
+    });
+});
 
 // Show alert messages
 function showAlert(type, message) {

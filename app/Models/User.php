@@ -71,10 +71,17 @@ class User extends Authenticatable
         return $this->role === 'customer';
     }
 
+    // Check if user is staff
+    public function isStaff()
+    {
+        return $this->role === 'staff';
+    }
+
     // Scopes for admin customer management
     public function scopeCustomers($query)
     {
-        return $query->where('role', 'customer');
+        // Include regular customers and staff so promoted users still appear in customer list
+        return $query->whereIn('role', ['customer', 'staff']);
     }
 
     public function scopeWithOrderStats($query)

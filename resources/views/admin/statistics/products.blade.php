@@ -11,10 +11,13 @@
         <a href="{{ route('admin.statistics.index') }}" class="btn btn-outline-secondary">
             <i class="fas fa-arrow-left"></i> Quay lại
         </a>
+        <a href="#" id="exportCsvBtn" class="btn btn-outline-success">
+            <i class="fas fa-file-csv"></i> Xuất CSV
+        </a>
         <select class="form-select" id="sortSelect" style="width: auto;">
-            <option value="sold" {{ $sort == 'sold' ? 'selected' : '' }}>Sắp xếp theo lượt bán</option>
-            <option value="revenue" {{ $sort == 'revenue' ? 'selected' : '' }}>Sắp xếp theo doanh thu</option>
-            <option value="stock" {{ $sort == 'stock' ? 'selected' : '' }}>Sắp xếp theo tồn kho</option>
+            <option value="sold" {{ $sap_xep == 'sold' ? 'selected' : '' }}>Sắp xếp theo lượt bán</option>
+            <option value="revenue" {{ $sap_xep == 'revenue' ? 'selected' : '' }}>Sắp xếp theo doanh thu</option>
+            <option value="stock" {{ $sap_xep == 'stock' ? 'selected' : '' }}>Sắp xếp theo tồn kho</option>
         </select>
     </div>
 </div>
@@ -214,7 +217,7 @@
                 
                 <!-- Pagination -->
                 <div class="d-flex justify-content-center">
-                    {{ $products->appends(['sort' => $sort])->links() }}
+                    {{ $products->appends(['sap_xep' => $sap_xep])->links() }}
                 </div>
             </div>
         </div>
@@ -227,7 +230,14 @@
 <script>
 // Sort selector
 document.getElementById('sortSelect').addEventListener('change', function() {
-    window.location.href = '{{ route("admin.statistics.products") }}?sort=' + this.value;
+    window.location.href = '{{ route("admin.statistics.products") }}?sap_xep=' + this.value;
+});
+
+// Export CSV
+document.getElementById('exportCsvBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    const s = document.getElementById('sortSelect').value;
+    window.open('{{ route("admin.statistics.export") }}?loai=products&sap_xep=' + s, '_blank');
 });
 </script>
 @endsection

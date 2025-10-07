@@ -28,22 +28,33 @@ class CouponController extends Controller
             ]);
         }
 
-        // Tính tổng tiền giỏ hàng
+        // Tính tổng tiền giỏ hàng và tổng tiền cho những sách được áp dụng (nếu coupon chỉ áp cho sách cụ thể)
         $cart = session()->get('cart', []);
         $cartTotal = 0;
+        $eligibleSubtotal = 0;
+
+        $eligibleBookIds = $coupon->books()->pluck('books.id')->toArray();
 
         foreach ($cart as $id => $details) {
             $book = Book::find($id);
             if ($book) {
                 $price = $book->sale_price ?? $book->price;
-                $cartTotal += $price * $details['quantity'];
+                $lineTotal = $price * $details['quantity'];
+                $cartTotal += $lineTotal;
+
+                if (empty($eligibleBookIds) || in_array($book->id, $eligibleBookIds)) {
+                    $eligibleSubtotal += $lineTotal;
+                }
             }
         }
 
-        if (!$coupon->isValid($cartTotal)) {
+        // If coupon targets specific books, validate based on eligible subtotal
+        $validationAmount = empty($eligibleBookIds) ? $cartTotal : $eligibleSubtotal;
+
+        if (!$coupon->isValid($validationAmount)) {
             $message = 'Mã giảm giá không áp dụng được!';
             
-            if ($coupon->minimum_amount && $cartTotal < $coupon->minimum_amount) {
+            if ($coupon->minimum_amount && $validationAmount < $coupon->minimum_amount) {
                 $message = 'Đơn hàng tối thiểu ' . number_format($coupon->minimum_amount) . 'đ để sử dụng mã này.';
             }
 
@@ -53,16 +64,18 @@ class CouponController extends Controller
             ]);
         }
 
-        $discount = $coupon->calculateDiscount($cartTotal);
+        // Calculate discount based on eligible subtotal (if coupon targets books)
+        $discount = $coupon->calculateDiscount($eligibleSubtotal ?: $cartTotal);
 
-        // Lưu coupon vào session
+        // Lưu coupon vào session, lưu danh sách sách được áp dụng để tính lại ở các bước khác
         session()->put('coupon', [
             'id' => $coupon->id,
             'code' => $coupon->code,
             'type' => $coupon->type,
             'value' => $coupon->value,
             'discount_amount' => $discount,
-            'minimum_order_amount' => $coupon->minimum_order_amount
+            'minimum_order_amount' => $coupon->minimum_order_amount,
+            'eligible_book_ids' => $eligibleBookIds
         ]);
 
         return response()->json([

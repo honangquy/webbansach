@@ -5,41 +5,36 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Book;
-use App\Models\Order;
-use App\Models\User;
-use App\Models\Category;
+use Illuminate\Support\Facades\DB;
 
 class AdminDashboardController extends Controller
 {
     public function index()
     {
-        // Get basic statistics
+        // Get statistics for dashboard
         $totalBooks = Book::count();
-        $totalOrders = Order::count();
-        $totalUsers = User::where('role', '!=', 'admin')->count();
-        $totalCategories = Category::count();
+        $totalCategories = \App\Models\Category::count();
+        $totalOrders = \App\Models\Order::count();
+    // Count customers and staff so promoted users are included
+    $totalCustomers = \App\Models\User::whereIn('role', ['customer', 'staff'])->count();
         
-        // Get recent orders
-        $recentOrders = Order::with('user')
+        $recentOrders = \App\Models\Order::with('user')
             ->orderBy('created_at', 'desc')
             ->limit(5)
             ->get();
-        
-        // Get sales data for chart
-        $salesData = Order::selectRaw('DATE(created_at) as date, SUM(total_amount) as total')
-            ->where('status', 'completed')
-            ->groupBy('date')
-            ->orderBy('date', 'desc')
-            ->limit(30)
+            
+        $lowStockBooks = Book::where('stock_quantity', '<=', 5)
+            ->where('status', true)
+            ->limit(5)
             ->get();
-        
+
         return view('admin.dashboard', compact(
-            'totalBooks',
+            'totalBooks', 
+            'totalCategories', 
             'totalOrders', 
-            'totalUsers',
-            'totalCategories',
+            'totalCustomers',
             'recentOrders',
-            'salesData'
+            'lowStockBooks'
         ));
     }
 }

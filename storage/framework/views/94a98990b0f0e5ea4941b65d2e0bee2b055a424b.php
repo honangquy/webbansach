@@ -17,6 +17,9 @@
         <button class="btn btn-primary" onclick="refreshData()">
             <i class="fas fa-sync-alt"></i> Làm mới
         </button>
+        <button class="btn btn-outline-primary" onclick="exportStatistics()">
+            <i class="fas fa-download"></i> Xuất CSV
+        </button>
     </div>
 </div>
 
@@ -33,7 +36,7 @@
                         <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo e(number_format($stats['total_orders'])); ?></div>
                     </div>
                     <div class="col-auto">
-                        <i class="fas fa-shopping-cart fa-2x text-gray-300"></i>
+                        <i class="fas fa-shopping-cart fa-2x text-primary"></i>
                     </div>
                 </div>
             </div>
@@ -51,7 +54,7 @@
                         <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo e(number_format($stats['total_revenue'])); ?>đ</div>
                     </div>
                     <div class="col-auto">
-                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                        <i class="fas fa-dollar-sign fa-2x text-success"></i>
                     </div>
                 </div>
             </div>
@@ -69,7 +72,7 @@
                         <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo e(number_format($stats['total_customers'])); ?></div>
                     </div>
                     <div class="col-auto">
-                        <i class="fas fa-users fa-2x text-gray-300"></i>
+                        <i class="fas fa-users fa-2x text-info"></i>
                     </div>
                 </div>
             </div>
@@ -87,7 +90,7 @@
                         <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo e(number_format($stats['total_books'])); ?></div>
                     </div>
                     <div class="col-auto">
-                        <i class="fas fa-book fa-2x text-gray-300"></i>
+                        <i class="fas fa-book fa-2x text-warning"></i>
                     </div>
                 </div>
             </div>
@@ -364,6 +367,12 @@ async function initializeCharts() {
         console.error('Failed to initialize charts:', error);
         showChartError('Chart.js library failed to load. Please check your internet connection.');
     }
+}
+
+function exportStatistics() {
+    const period = document.getElementById('periodSelect').value;
+    const params = new URLSearchParams({ period });
+    window.open('<?php echo e(route('admin.statistics.export')); ?>' + '?' + params.toString());
 }
 
 async function createRevenueChart(revenueData) {

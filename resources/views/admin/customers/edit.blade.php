@@ -78,6 +78,18 @@
                                     </div>
 
                                     <div class="col-md-12 mb-3">
+                                        <div>
+                                            @if($customer->role === 'staff')
+                                                <span class="badge bg-secondary">Nhân viên</span>
+                                            @elseif($customer->role === 'admin')
+                                                <span class="badge bg-dark">Admin</span>
+                                            @else
+                                                <span class="badge bg-light text-dark">Khách hàng</span>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12 mb-3">
                                         <label for="phone" class="form-label">Số điện thoại</label>
                                         <input type="text" 
                                                class="form-control @error('phone') is-invalid @enderror" 
@@ -184,6 +196,23 @@
                                         <button type="button" class="btn btn-danger" onclick="deleteCustomer()">
                                             <i class="fas fa-trash"></i> Xóa khách hàng
                                         </button>
+                                        @endif
+                                        @if($customer->role !== 'admin')
+                                            @if($customer->role === 'staff')
+                                                <form action="{{ route('admin.customers.demote', $customer) }}" method="POST" class="d-inline ms-2">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-warning">
+                                                        <i class="fas fa-user-minus"></i> Gỡ quyền nhân viên
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <form action="{{ route('admin.customers.promote', $customer) }}" method="POST" class="d-inline ms-2">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-success">
+                                                        <i class="fas fa-user-plus"></i> Nâng quyền thành nhân viên
+                                                    </button>
+                                                </form>
+                                            @endif
                                         @endif
                                     </div>
                                     <div>

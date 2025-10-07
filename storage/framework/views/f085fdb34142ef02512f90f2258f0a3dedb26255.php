@@ -135,6 +135,8 @@
                 </div>
             </div>
 
+            
+
             <!-- Payment Information (if applicable) -->
             <?php if($order->payment_method == 'qr_code'): ?>
             <div class="card mb-4">

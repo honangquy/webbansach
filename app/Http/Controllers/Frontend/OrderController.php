@@ -123,19 +123,38 @@ class OrderController extends Controller
             $discountAmount = 0;
             $couponCode = null;
             
-            if ($coupon && $total >= ($coupon['minimum_order_amount'] ?? 0)) {
-                if ($coupon['type'] === 'percentage') {
-                    $discountAmount = ($total * $coupon['value']) / 100;
-                } else {
-                    $discountAmount = $coupon['value'];
+            if ($coupon) {
+                $eligibleBookIds = $coupon['eligible_book_ids'] ?? [];
+                $eligibleSubtotal = 0;
+
+                foreach ($cart as $id => $details) {
+                    $book = Book::find($id);
+                    if ($book) {
+                        $price = $book->sale_price ?? $book->price;
+                        $lineTotal = $price * $details['quantity'];
+                        if (empty($eligibleBookIds) || in_array($book->id, $eligibleBookIds)) {
+                            $eligibleSubtotal += $lineTotal;
+                        }
+                    }
                 }
-                $couponCode = $coupon['code'];
-                
-                // Update coupon usage
-                if (isset($coupon['id'])) {
-                    $couponModel = \App\Models\Coupon::find($coupon['id']);
-                    if ($couponModel) {
-                        $couponModel->increment('used_count');
+
+                $validationAmount = empty($eligibleBookIds) ? $total : $eligibleSubtotal;
+
+                if ($validationAmount >= ($coupon['minimum_order_amount'] ?? 0)) {
+                    if ($coupon['type'] === 'percentage') {
+                        $discountAmount = ($eligibleSubtotal ?: $total) * $coupon['value'] / 100;
+                    } else {
+                        $discountAmount = min($coupon['value'], ($eligibleSubtotal ?: $total));
+                    }
+
+                    $couponCode = $coupon['code'];
+
+                    // Update coupon usage
+                    if (isset($coupon['id'])) {
+                        $couponModel = \App\Models\Coupon::find($coupon['id']);
+                        if ($couponModel) {
+                            $couponModel->increment('used_count');
+                        }
                     }
                 }
             }

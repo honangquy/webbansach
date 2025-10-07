@@ -40,6 +40,18 @@ class HomeController extends Controller
         // Get all categories
         $categories = \App\Models\Category::withCount('books')->get();
         
-        return view('frontend.home', compact('featuredBooks', 'latestBooks', 'categories'));
+        // Get active banners: active=true and now between start_at and end_at if set
+        $now = now();
+        $banners = \App\Models\Banner::where('active', true)
+            ->where(function($q) use ($now) {
+                $q->whereNull('start_at')->orWhere('start_at', '<=', $now);
+            })
+            ->where(function($q) use ($now) {
+                $q->whereNull('end_at')->orWhere('end_at', '>=', $now);
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('frontend.home', compact('featuredBooks', 'latestBooks', 'categories', 'banners'));
     }
 }

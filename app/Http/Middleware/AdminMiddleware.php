@@ -20,7 +20,9 @@ class AdminMiddleware
             return redirect()->route('login');
         }
 
-        if (!auth()->user()->isAdmin()) {
+        // Allow both admin and staff accounts to access admin area
+        $user = auth()->user();
+        if (! ($user->isAdmin() || (method_exists($user, 'isStaff') && $user->isStaff())) ) {
             abort(403, 'Unauthorized access');
         }
 

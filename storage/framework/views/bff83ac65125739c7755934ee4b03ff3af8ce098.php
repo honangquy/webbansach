@@ -11,11 +11,14 @@
         <a href="<?php echo e(route('admin.statistics.index')); ?>" class="btn btn-outline-secondary">
             <i class="fas fa-arrow-left"></i> Quay lại
         </a>
+        <a href="#" id="exportCsvBtn" class="btn btn-outline-success">
+            <i class="fas fa-file-csv"></i> Xuất CSV
+        </a>
         <select class="form-select" id="periodSelect" style="width: auto;">
-            <option value="7" <?php echo e($period == '7' ? 'selected' : ''); ?>>7 ngày qua</option>
-            <option value="30" <?php echo e($period == '30' ? 'selected' : ''); ?>>30 ngày qua</option>
-            <option value="90" <?php echo e($period == '90' ? 'selected' : ''); ?>>90 ngày qua</option>
-            <option value="365" <?php echo e($period == '365' ? 'selected' : ''); ?>>1 năm qua</option>
+            <option value="7" <?php echo e($khoang_ngay == '7' ? 'selected' : ''); ?>>7 ngày qua</option>
+            <option value="30" <?php echo e($khoang_ngay == '30' ? 'selected' : ''); ?>>30 ngày qua</option>
+            <option value="90" <?php echo e($khoang_ngay == '90' ? 'selected' : ''); ?>>90 ngày qua</option>
+            <option value="365" <?php echo e($khoang_ngay == '365' ? 'selected' : ''); ?>>1 năm qua</option>
         </select>
     </div>
 </div>
@@ -71,7 +74,7 @@
     <div class="col-lg-8">
         <div class="card shadow">
             <div class="card-header">
-                <h6 class="m-0 font-weight-bold text-primary">Doanh thu hàng ngày (<?php echo e($period); ?> ngày qua)</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Doanh thu hàng ngày (<?php echo e($khoang_ngay); ?> ngày qua)</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -184,7 +187,14 @@ const paymentChart = new Chart(paymentCtx, {
 
 // Period selector
 document.getElementById('periodSelect').addEventListener('change', function() {
-    window.location.href = '<?php echo e(route("admin.statistics.sales")); ?>?period=' + this.value;
+    window.location.href = '<?php echo e(route("admin.statistics.sales")); ?>?khoang_ngay=' + this.value;
+});
+
+// Export CSV
+document.getElementById('exportCsvBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    const p = document.getElementById('periodSelect').value;
+    window.open('<?php echo e(route("admin.statistics.export")); ?>?loai=sales&khoang_ngay=' + p, '_blank');
 });
 </script>
 <?php $__env->stopSection(); ?>

@@ -161,15 +161,28 @@
                             <td><?php echo e($customer->id); ?></td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <div class="avatar me-3">
-                                        <div class="avatar-initial bg-label-primary rounded">
-                                            <?php echo e(strtoupper(substr($customer->name, 0, 1))); ?>
+                                    <div class="me-3">
+                                        <?php if($customer->avatar): ?>
+                                            <img src="<?php echo e(asset('storage/' . $customer->avatar)); ?>" alt="<?php echo e($customer->name); ?>" class="rounded-circle admin-customer-avatar">
+                                        <?php else: ?>
+                                            <div class="avatar-initial bg-label-primary rounded admin-customer-avatar-initial">
+                                                <?php echo e(strtoupper(substr($customer->name, 0, 1))); ?>
 
-                                        </div>
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
                                     <div>
                                         <h6 class="mb-0"><?php echo e($customer->name); ?></h6>
                                         <small class="text-muted"><?php echo e($customer->email); ?></small>
+                                        <div>
+                                            <?php if($customer->role === 'staff'): ?>
+                                                <span class="badge bg-secondary">Nhân viên</span>
+                                            <?php elseif($customer->role === 'admin'): ?>
+                                                <span class="badge bg-dark">Admin</span>
+                                            <?php else: ?>
+                                                <span class="badge bg-light text-dark">Khách hàng</span>
+                                            <?php endif; ?>
+                                        </div>
                                     </div>
                                 </div>
                             </td>
@@ -212,6 +225,27 @@
                                                 </button>
                                             </form>
                                         </li>
+                                        <?php endif; ?>
+
+                                        <?php if($customer->role !== 'admin'): ?>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li class="px-3">
+                                                <?php if($customer->role === 'staff'): ?>
+                                                    <form action="<?php echo e(route('admin.customers.demote', $customer)); ?>" method="POST">
+                                                        <?php echo csrf_field(); ?>
+                                                        <button type="submit" class="btn btn-sm btn-outline-warning w-100">
+                                                            <i class="fas fa-user-minus"></i> Gỡ quyền nhân viên
+                                                        </button>
+                                                    </form>
+                                                <?php else: ?>
+                                                    <form action="<?php echo e(route('admin.customers.promote', $customer)); ?>" method="POST">
+                                                        <?php echo csrf_field(); ?>
+                                                        <button type="submit" class="btn btn-sm btn-outline-success w-100">
+                                                            <i class="fas fa-user-plus"></i> Nâng quyền thành nhân viên
+                                                        </button>
+                                                    </form>
+                                                <?php endif; ?>
+                                            </li>
                                         <?php endif; ?>
                                     </ul>
                                 </div>
@@ -282,6 +316,22 @@ function showAlert(type, message) {
 .avatar-initial {
     width: 40px;
     height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+}
+
+/* Admin customers avatar image */
+.admin-customer-avatar {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+}
+.admin-customer-avatar-initial {
+    width: 48px;
+    height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;

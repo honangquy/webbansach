@@ -52,6 +52,7 @@
             top: 0;
             z-index: 1000;
             perspective: 1000px; /* enable 3D transforms for children */
+            transition: width 280ms cubic-bezier(.2,.8,.2,1), box-shadow 220ms ease;
         }
         
         .sidebar .nav-link {
@@ -94,6 +95,7 @@
             margin-left: 250px;
             min-height: 100vh;
             background-color: #f8f9fa;
+            transition: margin-left 280ms cubic-bezier(.2,.8,.2,1);
         }
         
         .top-navbar {
@@ -145,72 +147,136 @@
                 margin-left: 0;
             }
         }
+        /* Minimized sidebar styles */
+        .sidebar.minimized {
+            width: 70px;
+            overflow: hidden;
+        }
+
+        .main-content.collapsed {
+            margin-left: 70px;
+        }
+
+        /* Hide label text when minimized and center icons */
+        .nav-label {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .sidebar.minimized .nav-label {
+            display: none;
+        }
+
+        .sidebar.minimized .nav-link {
+            text-align: center;
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
+        }
+
+        .sidebar .sidebar-title { display: inline-block; }
+        .sidebar.minimized .sidebar-title { display: none; }
     </style>
     <?php echo $__env->yieldContent('styles'); ?>
     <?php echo $__env->yieldPushContent('styles'); ?>
+</style>
+<style>
+    /* Fix oversized pagination chevrons/icons across vendor templates and themes.
+       Some pages render SVG or icon fonts very large due to local rules; clamp them here
+       so pagination previous/next arrows stay readable and consistent. */
+    .pagination svg,
+    .pagination .icon,
+    .pagination i,
+    .page-link svg,
+    .page-link i,
+    .ui.pagination .icon {
+        width: 1em !important;
+        height: 1em !important;
+        font-size: 1em !important;
+        vertical-align: middle !important;
+        display: inline-block !important;
+    }
+
+    /* Ensure the small pagination controls keep reasonable padding */
+    .pagination .page-link, .pagination a, .pagination span {
+        line-height: 1;
+        padding: .35rem .6rem !important;
+    }
+</style>
 </head>
 <body>
     <!-- Sidebar -->
     <nav class="sidebar">
-        <div class="p-3 text-center border-bottom border-secondary">
-            <h4 class="text-white">
-                <i class="fas fa-cogs"></i> Admin Panel
-            </h4>
+        <div class="p-3 d-flex align-items-center justify-content-between border-bottom border-secondary">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-cogs text-white me-2"></i>
+                <div class="sidebar-title text-white fw-bold">Admin Panel</div>
+            </div>
+            <div>
+                <button class="btn btn-sm btn-outline-light" id="sidebar-minimize" title="Thu nhỏ menu">
+                    <i class="fas fa-angle-double-left"></i>
+                </button>
+            </div>
         </div>
         
         <ul class="nav flex-column">
             <li class="nav-item">
                 <a class="nav-link <?php echo e(request()->routeIs('admin.dashboard') ? 'active' : ''); ?>" href="<?php echo e(route('admin.dashboard')); ?>">
-                    <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                    <i class="fas fa-tachometer-alt"></i> <span class="nav-label ms-2">Dashboard</span>
                 </a>
             </li>
             
             <li class="nav-item">
                 <a class="nav-link <?php echo e(request()->routeIs('admin.categories.*') ? 'active' : ''); ?>" href="<?php echo e(route('admin.categories.index')); ?>">
-                    <i class="fas fa-list me-2"></i> Quản lý danh mục
+                    <i class="fas fa-list"></i> <span class="nav-label ms-2">Quản lý danh mục</span>
                 </a>
             </li>
             
             <li class="nav-item">
                 <a class="nav-link <?php echo e(request()->routeIs('admin.books.*') ? 'active' : ''); ?>" href="<?php echo e(route('admin.books.index')); ?>">
-                    <i class="fas fa-book me-2"></i> Quản lý sách
+                    <i class="fas fa-book"></i> <span class="nav-label ms-2">Quản lý sách</span>
                 </a>
             </li>
             
             <li class="nav-item">
                 <a class="nav-link <?php echo e(request()->routeIs('admin.orders.*') ? 'active' : ''); ?>" href="<?php echo e(route('admin.orders.index')); ?>">
-                    <i class="fas fa-shopping-cart me-2"></i> Quản lý đơn hàng
+                    <i class="fas fa-shopping-cart"></i> <span class="nav-label ms-2">Quản lý đơn hàng</span>
                 </a>
             </li>
             
             <li class="nav-item">
                 <a class="nav-link <?php echo e(request()->routeIs('admin.customers.*') ? 'active' : ''); ?>" href="<?php echo e(route('admin.customers.index')); ?>">
-                    <i class="fas fa-users me-2"></i> Quản lý khách hàng
+                    <i class="fas fa-users"></i> <span class="nav-label ms-2">Quản lý khách hàng</span>
                 </a>
             </li>
             
             <li class="nav-item">
                 <a class="nav-link <?php echo e(request()->routeIs('admin.coupons.*') ? 'active' : ''); ?>" href="<?php echo e(route('admin.coupons.index')); ?>">
-                    <i class="fas fa-ticket-alt me-2"></i> Quản lý mã giảm giá
+                    <i class="fas fa-ticket-alt"></i> <span class="nav-label ms-2">Quản lý mã giảm giá</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link <?php echo e(request()->routeIs('admin.banners.*') ? 'active' : ''); ?>" href="<?php echo e(route('admin.banners.index')); ?>">
+                    <i class="fas fa-image"></i> <span class="nav-label ms-2">Quản lý banner</span>
                 </a>
             </li>
             
             <li class="nav-item">
                 <a class="nav-link <?php echo e(request()->routeIs('admin.statistics.*') ? 'active' : ''); ?>" href="<?php echo e(route('admin.statistics.index')); ?>">
-                    <i class="fas fa-chart-line me-2"></i> Thống kê
+                    <i class="fas fa-chart-line"></i> <span class="nav-label ms-2">Thống kê</span>
                 </a>
             </li>
             
             <li class="nav-item mt-3">
                 <a class="nav-link" href="<?php echo e(route('home')); ?>">
-                    <i class="fas fa-home me-2"></i> Về trang chủ
+                    <i class="fas fa-home"></i> <span class="nav-label ms-2">Về trang chủ</span>
                 </a>
             </li>
             
             <li class="nav-item">
                 <a class="nav-link" href="<?php echo e(route('logout')); ?>"
                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    <i class="fas fa-sign-out-alt me-2"></i> Đăng xuất
+                    <i class="fas fa-sign-out-alt"></i> <span class="nav-label ms-2">Đăng xuất</span>
                 </a>
                 <form id="logout-form" action="<?php echo e(route('logout')); ?>" method="POST" class="d-none">
                     <?php echo csrf_field(); ?>
@@ -283,6 +349,35 @@
         setTimeout(function() {
             $('.alert').fadeOut();
         }, 5000);
+        
+        // Sidebar minimize toggle (desktop) with persistence
+        (function() {
+            const btn = document.getElementById('sidebar-minimize');
+            const sidebar = document.querySelector('.sidebar');
+            const mainContent = document.querySelector('.main-content');
+
+            function setMinimized(min) {
+                if (min) {
+                    sidebar.classList.add('minimized');
+                    mainContent.classList.add('collapsed');
+                    btn.innerHTML = '<i class="fas fa-angle-double-right"></i>';
+                } else {
+                    sidebar.classList.remove('minimized');
+                    mainContent.classList.remove('collapsed');
+                    btn.innerHTML = '<i class="fas fa-angle-double-left"></i>';
+                }
+            }
+
+            // Initialize from localStorage
+            const stored = localStorage.getItem('admin_sidebar_minimized');
+            if (stored === '1') setMinimized(true);
+
+            btn?.addEventListener('click', function(e) {
+                const isMin = sidebar.classList.contains('minimized');
+                setMinimized(!isMin);
+                localStorage.setItem('admin_sidebar_minimized', isMin ? '0' : '1');
+            });
+        })();
     </script>
     
     <?php echo $__env->yieldContent('scripts'); ?>
