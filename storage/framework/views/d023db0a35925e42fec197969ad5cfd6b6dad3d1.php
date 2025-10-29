@@ -95,7 +95,7 @@ if ($banner) {
                                     <?php else: ?>
                                         <div style="width:100%; height:260px; display:flex; align-items:center; justify-content:center;">
                                             <div class="text-center">
-                                                <h3 class="mb-0">HNQ BookStore</h3>
+                                                <h3 class="mb-0">BookStore</h3>
                                                 <p class="small mb-0">Khám phá bộ sưu tập sách của chúng tôi</p>
                                             </div>
                                         </div>
@@ -190,7 +190,7 @@ if ($banner) {
                 <?php else: ?>
                 <div style="width:100%; height:260px; display:flex; align-items:center; justify-content:center;">
                     <div class="text-center">
-                        <h3 class="mb-0">HNQ BookStore</h3>
+                        <h3 class="mb-0">BookStore</h3>
                         <p class="small mb-0">Khám phá bộ sưu tập sách của chúng tôi</p>
                     </div>
                 </div>

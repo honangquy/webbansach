@@ -203,7 +203,7 @@
     <div class="invoice-container">
         <!-- Header -->
         <div class="invoice-header">
-            <div class="company-name">HNQ BookStore</div>
+            <div class="company-name">BookStore</div>
             <div style="color: #666; font-style: italic;">Hệ thống bán sách trực tuyến</div>
             <div class="invoice-title">HÓA ĐƠN BÁN HÀNG</div>
         </div>
@@ -304,7 +304,7 @@
         
         <!-- Footer -->
         <div class="footer">
-            <p><strong>Cảm ơn quý khách đã mua hàng tại HNQ BookStore!</strong></p>
+            <p><strong>Cảm ơn quý khách đã mua hàng tại BookStore!</strong></p>
             <p>Địa chỉ: 207 Cộng Hoà, Phường Bảy Hiền, TP HCM | Hotline: 0343935487 | Email: </p>
             <p style="margin-top: 15px; font-size: 12px;">
                 Hóa đơn được in lúc: {{ now()->format('d/m/Y H:i:s') }}

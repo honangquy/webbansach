@@ -117,7 +117,7 @@
         background: rgba(255, 255, 255, 0.15);
         backdrop-filter: blur(10px);
         color: #ffffff;
-        font-size: 15px;
+        font-size: 14px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
@@ -229,7 +229,7 @@
         <div class="col-12">
             <div class="auth-card">
                 <div class="brand-header">
-                    <div class="brand-name">HNQ BookStore</div>
+                    <div class="brand-name">BookStore</div>
                 </div>
 
                 <h3 class="auth-title">Đăng nhập</h3>

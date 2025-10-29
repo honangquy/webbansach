@@ -170,7 +170,7 @@
         <div class="col-12">
             <div class="glass-card">
                 <div class="brand-logo">
-                    <div class="brand-name">HNQ BookStore</div>
+                    <div class="brand-name">BookStore</div>
                 </div>
 
                 <h3 class="glass-title">Đặt lại mật khẩu</h3>

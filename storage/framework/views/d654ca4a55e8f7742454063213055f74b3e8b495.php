@@ -84,7 +84,7 @@
         border: 1px solid rgba(255, 255, 255, 0.3);
         border-radius: 16px;
         color: #ffffff;
-        font-size: 15px;
+        font-size: 14px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         backdrop-filter: blur(10px);
     }
@@ -194,7 +194,7 @@
         <div class="col-12">
             <div class="glass-card">
                 <div class="brand-logo">
-                    <div class="brand-name">HNQ BookStore</div>
+                    <div class="brand-name">BookStore</div>
                 </div>
 
                 <h3 class="glass-title">Quên mật khẩu?</h3>

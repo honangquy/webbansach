@@ -10,7 +10,7 @@
             <div class="about-hero p-5 rounded-4 text-white text-center" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); position: relative; overflow: hidden;">
                 <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);"></div>
                 <div style="position: relative; z-index: 2;">
-                    <h1 class="display-3 fw-bold mb-3">HNQ BookStore</h1>
+                    <h1 class="display-3 fw-bold mb-3">BookStore</h1>
                     <p class="lead fs-4">Nơi tri thức hội tụ, nơi đam mê được thỏa mãn</p>
                 </div>
             </div>
@@ -28,7 +28,7 @@
                     <h3 class="mb-0 fw-bold">Về chúng tôi</h3>
                 </div>
                 <p class="text-muted" style="line-height: 1.8;">
-                    HNQ BookStore là cửa hàng sách trực tuyến hàng đầu Việt Nam, được thành lập với sứ mệnh mang tri thức đến gần hơn với mọi người. 
+                    BookStore là cửa hàng sách trực tuyến hàng đầu Việt Nam, được thành lập với sứ mệnh mang tri thức đến gần hơn với mọi người. 
                     Chúng tôi tự hào cung cấp hàng ngàn đầu sách đa dạng từ văn học, kinh tế, đến công nghệ và thiếu nhi.
                 </p>
             </div>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
-    <title><?php echo $__env->yieldContent('title'); ?> - HNQ BookStore</title>
+    <title><?php echo $__env->yieldContent('title'); ?> - BookStore</title>
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -472,7 +472,7 @@
     <nav class="navbar navbar-expand-lg navbar-light sticky-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="<?php echo e(route('home')); ?>">
-                 HNQ BookStore
+                 BookStore
             </a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -588,7 +588,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4">
-                    <h5>HNQ BookStore</h5>
+                    <h5>BookStore</h5>
                     <p>Sách gì cũng có, mua hết ở shop tui :<</p>
                 </div>
                 <div class="col-md-4">
@@ -610,7 +610,7 @@
             <hr class="text-light">
             <div class="row">
                 <div class="col-12 text-center">
-                    <p>&copy; <?php echo e(date('Y')); ?> HNQ BookStore. All rights reserved.</p>
+                    <p>&copy; <?php echo e(date('Y')); ?> BookStore. All rights reserved.</p>
                 </div>
             </div>
         </div>

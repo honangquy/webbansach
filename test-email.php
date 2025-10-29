@@ -6,9 +6,9 @@ $app = require_once __DIR__.'/bootstrap/app.php';
 $app->make(\Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
 try {
-    \Illuminate\Support\Facades\Mail::raw('This is a test email from HNQ BookStore password reset system.', function($message) {
+    \Illuminate\Support\Facades\Mail::raw('This is a test email from BookStore password reset system.', function($message) {
         $message->to('test@example.com')
-                ->subject('Test Email - HNQ BookStore');
+                ->subject('Test Email - BookStore');
     });
     
     echo "✅ Email sent successfully!\n";
