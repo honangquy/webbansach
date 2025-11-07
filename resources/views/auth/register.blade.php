@@ -10,21 +10,25 @@
         z-index: 0;
         width: 100%;
         height: 100%;
-        background-image: url('https://mnismt.com/_next/static/media/background.ae46ac39.png');
+        /* Add color gradient overlay to boost vibrancy */
+        background-image: linear-gradient(135deg, rgba(255,120,80,0.18), rgba(120,60,200,0.18)), url('https://mnismt.com/_next/static/media/background.ae46ac39.png');
         background-position: center center;
         background-repeat: no-repeat;
         background-size: cover;
+        background-blend-mode: overlay;
         transform: scaleX(-1);
-        filter: none;
+        filter: saturate(1.25) contrast(1.05) brightness(1.02);
         -webkit-background-size: cover;
     }
 
     .auth-overlay {
         position: fixed;
         inset: 0;
-        background: linear-gradient(135deg, rgba(0,0,0,0.45), rgba(50,20,80,0.55));
-        backdrop-filter: blur(3px);
+        /* lighten the overlay so the colorful base comes through */
+        background: linear-gradient(135deg, rgba(0,0,0,0.22), rgba(50,20,80,0.28));
+        backdrop-filter: blur(4px) saturate(1.05);
         z-index: 1;
+        mix-blend-mode: multiply;
     }
 
     /* Enhanced Glass Card with Liquid Glass Effect */
@@ -117,7 +121,7 @@
         background: rgba(255, 255, 255, 0.15);
         backdrop-filter: blur(10px);
         color: #ffffff;
-        font-size: 14px;
+        font-size: 13px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
@@ -157,7 +161,7 @@
         text-align: center;
         margin-top: 18px;
         color: rgba(255, 255, 255, 0.85);
-        font-size: 14px;
+        font-size: 13px;
     }
 
     .auth-footer-link a {

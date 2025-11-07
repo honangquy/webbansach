@@ -47,16 +47,18 @@
         }
     
         .sidebar {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-            border-right: 1px solid #e2e8f0;
+            /* Dark theme sidebar */
+            background: linear-gradient(180deg, #071024 0%, #081226 100%);
+            border-right: 1px solid rgba(255,255,255,0.04);
             min-height: 100vh;
             width: 250px;
             position: fixed;
             left: 0;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 30px rgba(2,6,23,0.6);
             animation: fadeInPage 0.5s ease-in-out;
+            color: #cbd5e1;
         }
         
         .content-wrapper {
@@ -70,11 +72,11 @@
         }
         
         .sidebar .nav-link {
-            color: #475569;
+            color: #cbd5e1;
             padding: 12px 16px;
             margin: 2px 8px;
             border-radius: 12px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
             font-size: 0.95rem;
@@ -91,16 +93,25 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
-            transition: left 0.5s;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+            transition: left 0.45s ease;
+            mix-blend-mode: screen;
         }
         
         @media (hover: hover) and (pointer: fine) {
             .sidebar .nav-link:hover {
-                background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-                color: white;
+                background: linear-gradient(135deg, rgba(99,102,241,0.10), rgba(59,130,246,0.08));
+                color: #ffffff;
                 transform: translateY(-2px) scale(1.02);
-                box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+                box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+            }
+                border-left: 4px solid rgba(99,102,241,0.95);
+                padding-left: 12px;
+            }
+
+            .sidebar .nav-link:hover .nav-icon {
+                color: #fff;
+                transform: translateY(-1px) scale(1.05) rotate(4deg);
             }
 
             .sidebar .nav-link:hover:before {
@@ -117,10 +128,22 @@
         }
          
          .sidebar .nav-link.active {
-             background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-             color: white;
+             background: linear-gradient(135deg, rgba(99,102,241,0.14), rgba(79,70,229,0.14));
+             color: #fff;
              transform: translateY(-1px);
-             box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+             box-shadow: 0 6px 22px rgba(2,6,23,0.6);
+         }
+             background: linear-gradient(135deg, rgba(99,102,241,0.30), rgba(79,70,229,0.22));
+             color: #fff;
+             transform: translateY(-1px);
+             box-shadow: 0 8px 28px rgba(59,130,246,0.18);
+             border-left: 4px solid rgba(99,102,241,1);
+             padding-left: 12px;
+         }
+
+         .sidebar .nav-link.active .nav-icon {
+             color: #fff;
+             transform: translateY(-1px) scale(1.06);
          }
 
          .nav-icon {
@@ -131,7 +154,7 @@
          }
 
         .sidebar-header h4 {
-            color: #1e293b !important;
+            color: #e6eef8 !important;
             font-size: 1.1rem;
         }
 
@@ -170,9 +193,9 @@
 <body>
     <!-- Sidebar -->
     <nav class="sidebar">
-        <div class="sidebar-header p-4" style="border-bottom: 1px solid #e2e8f0;">
+        <div class="sidebar-header p-4" style="border-bottom: 1px solid rgba(255,255,255,0.06);">
             <div class="d-flex align-items-center">
-                <svg class="nav-icon" style="margin-right: 8px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <svg class="nav-icon" style="margin-right: 8px; color: inherit;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                 </svg>

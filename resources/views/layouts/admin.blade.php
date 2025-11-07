@@ -57,25 +57,27 @@
         }
         
         .sidebar {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-            border-right: 1px solid #e2e8f0;
+            /* Dark theme sidebar */
+            background: linear-gradient(180deg, #071024 0%, #081226 100%);
+            border-right: 1px solid rgba(255,255,255,0.04);
             min-height: 100vh;
             width: 250px;
             position: fixed;
             left: 0;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 30px rgba(2,6,23,0.6);
             transition: width 280ms cubic-bezier(.2,.8,.2,1), box-shadow 220ms ease;
             animation: fadeInPage 0.5s ease-in-out;
+            color: #cbd5e1;
         }
         
         .sidebar .nav-link {
-            color: #475569;
+            color: #cbd5e1;
             padding: 12px 16px;
             margin: 2px 8px;
             border-radius: 12px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
             font-size: 0.95rem;
@@ -92,17 +94,28 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
-            transition: left 0.5s;
+            /* stronger light sweep to read on dark bg */
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+            transition: left 0.45s ease;
+            mix-blend-mode: screen;
+            pointer-events: none;
         }
         
         /* Hover elevation effect: only on devices that support hover */
         @media (hover: hover) and (pointer: fine) {
             .sidebar .nav-link:hover {
-                background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-                color: white;
+                /* stronger accent on hover for dark theme */
+                background: linear-gradient(135deg, rgba(99,102,241,0.22), rgba(59,130,246,0.16));
+                color: #ffffff;
                 transform: translateY(-2px) scale(1.02);
-                box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+                box-shadow: 0 10px 36px rgba(59,130,246,0.14);
+                border-left: 4px solid rgba(99,102,241,0.95);
+                padding-left: 12px; /* visually keep spacing when left border appears */
+            }
+
+            .sidebar .nav-link:hover .nav-icon {
+                color: #fff;
+                transform: translateY(-1px) scale(1.05) rotate(4deg);
             }
 
             .sidebar .nav-link:hover:before {
@@ -115,25 +128,35 @@
 
             .sidebar .nav-link:focus {
                 outline: none;
-                background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+                background: linear-gradient(135deg, rgba(99,102,241,0.22), rgba(79,70,229,0.16));
                 color: white;
                 transform: translateY(-1px);
-                box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+                box-shadow: 0 6px 22px rgba(2,6,23,0.6);
+                border-left: 4px solid rgba(99,102,241,0.95);
+                padding-left: 12px;
             }
         }
          
          .sidebar .nav-link.active {
-             background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-             color: white;
+             background: linear-gradient(135deg, rgba(99,102,241,0.30), rgba(79,70,229,0.22));
+             color: #fff;
              transform: translateY(-1px);
-             box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+             box-shadow: 0 8px 28px rgba(59,130,246,0.18);
+             border-left: 4px solid rgba(99,102,241,1);
+             padding-left: 12px;
          }
 
-         .nav-icon {
+         .sidebar .nav-link.active .nav-icon {
+             color: #fff;
+             transform: translateY(-1px) scale(1.06);
+         }
+
+        .nav-icon {
              width: 20px;
              height: 20px;
              margin-right: 12px;
-             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+             transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+             color: inherit; /* ensure SVGs using currentColor pick up the light color */
          }
         
         .main-content {
@@ -337,16 +360,16 @@
 <body>
     <!-- Sidebar -->
     <nav class="sidebar">
-        <div class="p-4 d-flex align-items-center justify-content-between" style="border-bottom: 1px solid #e2e8f0;">
+        <div class="p-4 d-flex align-items-center justify-content-between" style="border-bottom: 1px solid rgba(255,255,255,0.06);">
             <div class="d-flex align-items-center">
-                <svg class="nav-icon" style="margin-right: 8px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <svg class="nav-icon" style="margin-right: 8px; color: inherit;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                 </svg>
-                <div class="sidebar-title fw-bold" style="color: #1e293b; font-size: 1.1rem;">Admin Panel</div>
+                <div class="sidebar-title fw-bold" style="color: #e6eef8; font-size: 1.1rem;">Admin Panel</div>
             </div>
             <div>
-                <button class="btn btn-sm" id="sidebar-minimize" title="Thu nhỏ menu" style="border: 1px solid #e2e8f0; color: #64748b;">
+                <button class="btn btn-sm" id="sidebar-minimize" title="Thu nhỏ menu" style="border: 1px solid rgba(255,255,255,0.06); color: #cbd5e1; background: transparent;">
                     <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path>
                     </svg>
@@ -371,7 +394,7 @@
                         <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                         </svg>
-                        <span class="nav-label">Quản lý danh mục</span>
+                        <span class="nav-label">Danh mục</span>
                     </a>
                 </li>
                 
@@ -380,7 +403,7 @@
                         <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
                         </svg>
-                        <span class="nav-label">Quản lý sách</span>
+                        <span class="nav-label">Sách</span>
                     </a>
                 </li>
                 
@@ -389,7 +412,7 @@
                         <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                         </svg>
-                        <span class="nav-label">Quản lý đơn hàng</span>
+                        <span class="nav-label">Đơn hàng</span>
                     </a>
                 </li>
                 
@@ -398,7 +421,7 @@
                         <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                         </svg>
-                        <span class="nav-label">Quản lý khách hàng</span>
+                        <span class="nav-label">Khách hàng</span>
                     </a>
                 </li>
                 
@@ -407,7 +430,7 @@
                         <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path>
                         </svg>
-                        <span class="nav-label">Quản lý mã giảm giá</span>
+                        <span class="nav-label">Mã giảm giá</span>
                     </a>
                 </li>
                 
@@ -416,7 +439,7 @@
                         <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                         </svg>
-                        <span class="nav-label">Quản lý banner</span>
+                        <span class="nav-label">Banner</span>
                     </a>
                 </li>
                 
@@ -429,7 +452,7 @@
                     </a>
                 </li>
                 
-                <li class="nav-item" style="margin-top: 1rem; border-top: 1px solid #e2e8f0; padding-top: 1rem;">
+                <li class="nav-item" style="margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 1rem;">
                     <a class="nav-link" href="{{ route('home') }}">
                         <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>

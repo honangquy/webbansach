@@ -660,7 +660,7 @@ function updateCartCount() {
     align-items: center;
     justify-content: center;
     color: #6c757d;
-    font-size: 14px;
+    font-size: 13px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
