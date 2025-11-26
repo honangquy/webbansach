@@ -1,17 +1,17 @@
-@extends('layouts.admin')
 
-@section('title', 'Chi tiết đơn hàng #' . $order->order_number)
 
-@section('content')
+<?php $__env->startSection('title', 'Chi tiết đơn hàng #' . $order->order_number); ?>
+
+<?php $__env->startSection('content'); ?>
 <div class="container-fluid py-4">
     <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h1 class="h3 mb-0">Chi tiết đơn hàng #{{ $order->order_number }}</h1>
+            <h1 class="h3 mb-0">Chi tiết đơn hàng #<?php echo e($order->order_number); ?></h1>
             <small class="text-muted">Thông tin chi tiết và trạng thái đơn hàng</small>
         </div>
         <div>
-            <a href="{{ route('admin.orders.index') }}" class="btn btn-secondary">
+            <a href="<?php echo e(route('admin.orders.index')); ?>" class="btn btn-secondary">
                 <i class="fas fa-arrow-left"></i> Quay lại
             </a>
             <button class="btn btn-outline-primary" onclick="printOrder()">
@@ -28,23 +28,23 @@
                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
                     <h6 class="m-0 font-weight-bold text-primary">Thông tin đơn hàng</h6>
                     <div>
-                        @switch($order->status)
-                            @case('pending')
+                        <?php switch($order->status):
+                            case ('pending'): ?>
                                 <span class="badge bg-warning fs-6">Chờ xử lý</span>
-                                @break
-                            @case('processing')
+                                <?php break; ?>
+                            <?php case ('processing'): ?>
                                 <span class="badge bg-info fs-6">Đang xử lý</span>
-                                @break
-                            @case('shipped')
+                                <?php break; ?>
+                            <?php case ('shipped'): ?>
                                 <span class="badge bg-primary fs-6">Đang giao</span>
-                                @break
-                            @case('delivered')
+                                <?php break; ?>
+                            <?php case ('delivered'): ?>
                                 <span class="badge bg-success fs-6">Đã giao</span>
-                                @break
-                            @case('cancelled')
+                                <?php break; ?>
+                            <?php case ('cancelled'): ?>
                                 <span class="badge bg-danger fs-6">Đã hủy</span>
-                                @break
-                        @endswitch
+                                <?php break; ?>
+                        <?php endswitch; ?>
                     </div>
                 </div>
                 <div class="card-body">
@@ -54,23 +54,23 @@
                                 <h6 class="text-muted mb-2">Thông tin cơ bản</h6>
                                 <div class="info-item">
                                     <strong>Mã đơn hàng:</strong>
-                                    <span>#{{ $order->order_number }}</span>
+                                    <span>#<?php echo e($order->order_number); ?></span>
                                 </div>
                                 <div class="info-item">
                                     <strong>Ngày đặt hàng:</strong>
-                                    <span>{{ $order->created_at->format('d/m/Y H:i') }}</span>
+                                    <span><?php echo e($order->created_at->format('d/m/Y H:i')); ?></span>
                                 </div>
                                 <div class="info-item">
                                     <strong>Phương thức thanh toán:</strong>
-                                    <span>{{ $order->payment_method === 'cod' ? 'Thanh toán khi nhận hàng' : 'Chuyển khoản' }}</span>
+                                    <span><?php echo e($order->payment_method === 'cod' ? 'Thanh toán khi nhận hàng' : 'Chuyển khoản'); ?></span>
                                 </div>
-                                {{-- Only show payment status when order is paid. Removed 'Chưa thanh toán' badge per request. --}}
-                                @if($order->payment_status === 'paid')
+                                
+                                <?php if($order->payment_status === 'paid'): ?>
                                 <div class="info-item">
                                     <strong>Trạng thái thanh toán:</strong>
                                     <span class="badge bg-success">Đã thanh toán</span>
                                 </div>
-                                @endif
+                                <?php endif; ?>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -78,22 +78,22 @@
                                 <h6 class="text-muted mb-2">Thông tin giao hàng</h6>
                                 <div class="info-item">
                                     <strong>Tên người nhận:</strong>
-                                    <span>{{ $order->shipping_name }}</span>
+                                    <span><?php echo e($order->shipping_name); ?></span>
                                 </div>
                                 <div class="info-item">
                                     <strong>Số điện thoại:</strong>
-                                    <span>{{ $order->shipping_phone }}</span>
+                                    <span><?php echo e($order->shipping_phone); ?></span>
                                 </div>
                                 <div class="info-item">
                                     <strong>Địa chỉ giao hàng:</strong>
-                                    <span>{{ $order->shipping_address }}</span>
+                                    <span><?php echo e($order->shipping_address); ?></span>
                                 </div>
-                                @if($order->notes)
+                                <?php if($order->notes): ?>
                                 <div class="info-item">
                                     <strong>Ghi chú:</strong>
-                                    <span>{{ $order->notes }}</span>
+                                    <span><?php echo e($order->notes); ?></span>
                                 </div>
-                                @endif
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
@@ -117,45 +117,45 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($order->orderDetails as $detail)
+                                <?php $__currentLoopData = $order->orderDetails; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $detail): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            @if($detail->book && $detail->book->image)
-                                                <img src="{{ $detail->book->image_url }}" 
-                                                 alt="{{ $detail->book_title }}" 
+                                            <?php if($detail->book && $detail->book->image): ?>
+                                                <img src="<?php echo e($detail->book->image_url); ?>" 
+                                                 alt="<?php echo e($detail->book_title); ?>" 
                                                  class="me-3" 
                                                  style="width: 50px; height: 70px; object-fit: cover;">
-                                            @else
+                                            <?php else: ?>
                                             <div class="bg-light me-3 d-flex align-items-center justify-content-center" 
                                                  style="width: 50px; height: 70px;">
                                                 <i class="fas fa-book text-muted"></i>
                                             </div>
-                                            @endif
+                                            <?php endif; ?>
                                             <div>
-                                                <strong>{{ $detail->book_title }}</strong><br>
-                                                @if($detail->book)
+                                                <strong><?php echo e($detail->book_title); ?></strong><br>
+                                                <?php if($detail->book): ?>
                                                 <small class="text-muted">
-                                                    <a href="{{ route('admin.books.show', $detail->book) }}" class="text-decoration-none">
+                                                    <a href="<?php echo e(route('admin.books.show', $detail->book)); ?>" class="text-decoration-none">
                                                         Xem sách
                                                     </a>
                                                 </small>
-                                                @else
+                                                <?php else: ?>
                                                 <small class="text-danger">Sản phẩm đã bị xóa</small>
-                                                @endif
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </td>
-                                    <td>{{ number_format($detail->price) }}đ</td>
-                                    <td>{{ $detail->quantity }}</td>
-                                    <td><strong>{{ number_format($detail->price * $detail->quantity) }}đ</strong></td>
+                                    <td><?php echo e(number_format($detail->price)); ?>đ</td>
+                                    <td><?php echo e($detail->quantity); ?></td>
+                                    <td><strong><?php echo e(number_format($detail->price * $detail->quantity)); ?>đ</strong></td>
                                 </tr>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <th colspan="3" class="text-end">Tổng cộng:</th>
-                                    <th><strong class="text-success">{{ number_format($order->final_amount ?? $order->total_amount) }}đ</strong></th>
+                                    <th><strong class="text-success"><?php echo e(number_format($order->final_amount ?? $order->total_amount)); ?>đ</strong></th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -164,27 +164,27 @@
             </div>
 
             <!-- Order History -->
-            @if(false) {{-- Tạm thời ẩn phần Order History --}}
+            <?php if(false): ?> 
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">Lịch sử đơn hàng</h6>
                 </div>
                 <div class="card-body">
                     <div class="timeline">
-                        @foreach($orderHistory as $history)
+                        <?php $__currentLoopData = $orderHistory; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $history): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="timeline-item">
                             <div class="timeline-marker bg-primary"></div>
                             <div class="timeline-content">
-                                <h6 class="mb-1">{{ $history->status_text }}</h6>
-                                <p class="text-muted mb-1">{{ $history->notes }}</p>
-                                <small class="text-muted">{{ $history->created_at->format('d/m/Y H:i') }}</small>
+                                <h6 class="mb-1"><?php echo e($history->status_text); ?></h6>
+                                <p class="text-muted mb-1"><?php echo e($history->notes); ?></p>
+                                <small class="text-muted"><?php echo e($history->created_at->format('d/m/Y H:i')); ?></small>
                             </div>
                         </div>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
                 </div>
             </div>
-            @endif {{-- Kết thúc phần Order History tạm thời ẩn --}}
+            <?php endif; ?> 
         </div>
 
         <!-- Sidebar -->
@@ -198,30 +198,31 @@
                     <div class="text-center mb-3">
                         <div class="avatar-lg mx-auto mb-2">
                             <div class="avatar-initial bg-label-primary rounded-circle" style="width: 60px; height: 60px; font-size: 1.5rem;">
-                                {{ strtoupper(substr($order->user->name, 0, 1)) }}
+                                <?php echo e(strtoupper(substr($order->user->name, 0, 1))); ?>
+
                             </div>
                         </div>
-                        <h6 class="mb-1">{{ $order->user->name }}</h6>
-                        <p class="text-muted mb-0">{{ $order->user->email }}</p>
+                        <h6 class="mb-1"><?php echo e($order->user->name); ?></h6>
+                        <p class="text-muted mb-0"><?php echo e($order->user->email); ?></p>
                     </div>
 
                     <div class="customer-stats">
                         <div class="stat-item">
                             <strong>Tổng đơn hàng:</strong>
-                            <span class="float-end">{{ $order->user->orders_count ?? 0 }}</span>
+                            <span class="float-end"><?php echo e($order->user->orders_count ?? 0); ?></span>
                         </div>
                         <div class="stat-item">
                             <strong>Tổng chi tiêu:</strong>
-                            <span class="float-end text-success">{{ number_format($order->user->orders_sum_total_amount ?? 0) }}đ</span>
+                            <span class="float-end text-success"><?php echo e(number_format($order->user->orders_sum_total_amount ?? 0)); ?>đ</span>
                         </div>
                         <div class="stat-item">
                             <strong>Ngày đăng ký:</strong>
-                            <span class="float-end">{{ $order->user->created_at->format('d/m/Y') }}</span>
+                            <span class="float-end"><?php echo e($order->user->created_at->format('d/m/Y')); ?></span>
                         </div>
                     </div>
 
                     <div class="d-grid mt-3">
-                        <a href="{{ route('admin.customers.show', $order->user) }}" class="btn btn-outline-primary">
+                        <a href="<?php echo e(route('admin.customers.show', $order->user)); ?>" class="btn btn-outline-primary">
                             <i class="fas fa-user"></i> Xem hồ sơ khách hàng
                         </a>
                     </div>
@@ -235,15 +236,15 @@
                 </div>
                 <div class="card-body">
                     <form id="statusUpdateForm">
-                        @csrf
+                        <?php echo csrf_field(); ?>
                         <div class="mb-3">
                             <label for="status" class="form-label">Trạng thái đơn hàng</label>
                             <select class="form-select" id="status" name="status">
-                                <option value="pending" {{ $order->status === 'pending' ? 'selected' : '' }}>Chờ xử lý</option>
-                                <option value="processing" {{ $order->status === 'processing' ? 'selected' : '' }}>Đang xử lý</option>
-                                <option value="shipped" {{ $order->status === 'shipped' ? 'selected' : '' }}>Đang giao</option>
-                                <option value="delivered" {{ $order->status === 'delivered' ? 'selected' : '' }}>Đã giao</option>
-                                <option value="cancelled" {{ $order->status === 'cancelled' ? 'selected' : '' }}>Đã hủy</option>
+                                <option value="pending" <?php echo e($order->status === 'pending' ? 'selected' : ''); ?>>Chờ xử lý</option>
+                                <option value="processing" <?php echo e($order->status === 'processing' ? 'selected' : ''); ?>>Đang xử lý</option>
+                                <option value="shipped" <?php echo e($order->status === 'shipped' ? 'selected' : ''); ?>>Đang giao</option>
+                                <option value="delivered" <?php echo e($order->status === 'delivered' ? 'selected' : ''); ?>>Đã giao</option>
+                                <option value="cancelled" <?php echo e($order->status === 'cancelled' ? 'selected' : ''); ?>>Đã hủy</option>
                             </select>
                         </div>
 
@@ -267,17 +268,17 @@
                             <i class="fas fa-print"></i> In đơn hàng
                         </button>
                         
-                        @if($order->status !== 'delivered' && $order->status !== 'cancelled')
+                        <?php if($order->status !== 'delivered' && $order->status !== 'cancelled'): ?>
                         <button class="btn btn-outline-warning" onclick="sendNotification()">
                             <i class="fas fa-envelope"></i> Gửi thông báo
                         </button>
-                        @endif
+                        <?php endif; ?>
 
-                        @if($order->status === 'pending')
+                        <?php if($order->status === 'pending'): ?>
                         <button class="btn btn-outline-danger" onclick="cancelOrder()">
                             <i class="fas fa-times"></i> Hủy đơn hàng
                         </button>
-                        @endif
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -290,24 +291,24 @@
                 <div class="card-body">
                     <div class="stat-item">
                         <strong>Số sản phẩm:</strong>
-                        <span class="float-end">{{ $order->orderDetails->sum('quantity') }}</span>
+                        <span class="float-end"><?php echo e($order->orderDetails->sum('quantity')); ?></span>
                     </div>
                     <div class="stat-item">
                         <strong>Loại sản phẩm:</strong>
-                        <span class="float-end">{{ $order->orderDetails->count() }}</span>
+                        <span class="float-end"><?php echo e($order->orderDetails->count()); ?></span>
                     </div>
                     <div class="stat-item">
                         <strong>Giá trị đơn hàng:</strong>
-                        <span class="float-end text-success">{{ number_format($order->total_amount) }}đ</span>
+                        <span class="float-end text-success"><?php echo e(number_format($order->total_amount)); ?>đ</span>
                     </div>
                     <div class="stat-item">
                         <strong>Thời gian xử lý:</strong>
                         <span class="float-end">
-                            @if($order->status === 'delivered')
-                                {{ $order->created_at->diffInDays($order->updated_at) }} ngày
-                            @else
-                                {{ $order->created_at->diffInDays(now()) }} ngày
-                            @endif
+                            <?php if($order->status === 'delivered'): ?>
+                                <?php echo e($order->created_at->diffInDays($order->updated_at)); ?> ngày
+                            <?php else: ?>
+                                <?php echo e($order->created_at->diffInDays(now())); ?> ngày
+                            <?php endif; ?>
                         </span>
                     </div>
                 </div>
@@ -315,14 +316,14 @@
         </div>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
 function updateOrderStatus() {
     console.log('updateOrderStatus called');
     
-    const currentStatus = '{{ $order->status }}';
+    const currentStatus = '<?php echo e($order->status); ?>';
     const newStatus = document.getElementById('status').value;
     const notes = document.getElementById('notes').value;
 
@@ -347,7 +348,7 @@ function updateOrderStatus() {
         }
     });
 
-    const url = '{{ route("admin.orders.update-status", $order->id) }}';
+    const url = '<?php echo e(route("admin.orders.update-status", $order->id)); ?>';
     console.log('URL:', url);
     
     const data = {
@@ -389,7 +390,7 @@ function updateOrderStatus() {
 }
 
 function printOrder() {
-    window.open('http://localhost/webbansach/laravel-app/public/admin/orders/{{ $order->id }}/print', '_blank');
+    window.open('http://localhost/webbansach/laravel-app/public/admin/orders/<?php echo e($order->id); ?>/print', '_blank');
 }
 
 function sendNotification() {
@@ -412,7 +413,7 @@ function cancelOrder() {
         }
     });
 
-    $.post('{{ route("admin.orders.update-status", $order->id) }}', {
+    $.post('<?php echo e(route("admin.orders.update-status", $order->id)); ?>', {
         status: 'cancelled',
         note: 'Đơn hàng bị hủy bởi quản trị viên'
     })
@@ -448,9 +449,9 @@ function showAlert(type, message) {
     }, 5000);
 }
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
 
-@push('styles')
+<?php $__env->startPush('styles'); ?>
 <style>
 .info-item {
     display: flex;
@@ -550,4 +551,5 @@ function showAlert(type, message) {
     padding: 0.5rem 0.75rem;
 }
 </style>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('layouts.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\webbansach\laravel-app\resources\views/admin/orders/show.blade.php ENDPATH**/ ?>

@@ -260,6 +260,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     // Banners management routes
     Route::resource('banners', App\Http\Controllers\Admin\BannerController::class);
     
+    // Flash Sales management routes
+    Route::resource('flash-sales', App\Http\Controllers\Admin\FlashSaleController::class);
+    Route::post('flash-sales/{id}/toggle-status', [App\Http\Controllers\Admin\FlashSaleController::class, 'toggleStatus'])->name('flash-sales.toggle-status');
+    
     // Statistics routes
     Route::prefix('statistics')->name('statistics.')->group(function () {
         Route::get('/', [App\Http\Controllers\Admin\AdminStatisticsController::class, 'index'])->name('index');

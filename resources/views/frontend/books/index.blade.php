@@ -196,7 +196,14 @@
                                 <div class="mt-auto">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
-                                            @if($book->sale_price && $book->sale_price < $book->price)
+                                            @if(isset($flashSaleItems[$book->id]))
+                                                <!-- Flash Sale Price -->
+                                                <span class="h6 text-danger mb-0 fw-bold">{{ number_format($flashSaleItems[$book->id]) }}đ</span>
+                                                <small class="text-muted text-decoration-line-through">
+                                                    {{ number_format($book->price) }}đ
+                                                </small>
+                                                <span class="badge bg-danger ms-1">FLASH SALE</span>
+                                            @elseif($book->sale_price && $book->sale_price < $book->price)
                                                 <span class="h6 text-danger mb-0">{{ number_format($book->sale_price) }}đ</span>
                                                 <small class="text-muted text-decoration-line-through">
                                                     {{ number_format($book->price) }}đ

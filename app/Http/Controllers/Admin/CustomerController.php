@@ -84,7 +84,7 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-    $customer = User::findOrFail($id);
+        $customer = User::findOrFail($id);
 
         $request->validate([
             'name' => 'required|string|max:255',
@@ -95,12 +95,17 @@ class CustomerController extends Controller
                 Rule::unique('users')->ignore($customer->id)
             ],
             'password' => 'nullable|string|min:8|confirmed',
-            'status' => 'required|in:active,inactive'
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:500',
+            'date_of_birth' => 'nullable|date'
         ]);
 
         $data = [
             'name' => $request->name,
             'email' => $request->email,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'date_of_birth' => $request->date_of_birth,
         ];
 
         if ($request->filled('password')) {

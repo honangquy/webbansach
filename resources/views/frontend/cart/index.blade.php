@@ -54,14 +54,26 @@
                                     <a href="{{ route('books.show', $item['book']->id) }}" class="text-decoration-none text-dark fw-bold">{{ $item['book']->title }}</a>
                                     <div class="text-muted small">{{ $item['book']->author }}</div>
                                     <div class="text-primary small">{{ $item['book']->category->name }}</div>
+                                    
+                                    @if(isset($item['is_flash_sale']) && $item['is_flash_sale'])
+                                        <span class="badge bg-danger mt-1" style="font-size: 11px;">
+                                            <i class="fas fa-bolt"></i> FLASH SALE
+                                        </span>
+                                    @endif
                                 </div>
 
                                 <!-- Price -->
                                 <div class="text-center mx-4" style="min-width: 120px;">
-                                    @if($item['book']->sale_price && $item['book']->sale_price < $item['book']->price)
+                                    @if(isset($item['is_flash_sale']) && $item['is_flash_sale'])
+                                        {{-- Flash Sale Price --}}
+                                        <div class="fw-bold text-danger">{{ number_format($item['price']) }}đ</div>
+                                        <small class="text-muted text-decoration-line-through">{{ number_format($item['book']->price) }}đ</small>
+                                    @elseif($item['book']->sale_price && $item['book']->sale_price < $item['book']->price)
+                                        {{-- Regular Sale Price --}}
                                         <div class="fw-bold text-danger">{{ number_format($item['price']) }}đ</div>
                                         <small class="text-muted text-decoration-line-through">{{ number_format($item['book']->price) }}đ</small>
                                     @else
+                                        {{-- Regular Price --}}
                                         <div class="fw-bold text-danger">{{ number_format($item['price']) }}đ</div>
                                     @endif
                                 </div>

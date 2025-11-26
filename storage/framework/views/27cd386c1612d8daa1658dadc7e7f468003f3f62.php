@@ -47,6 +47,26 @@
             background-color: #f8f9fa; /* Light gray background */
             font-family: 'Inter', sans-serif; /* Set Inter as the default font */
             padding-top: 0 !important; /* Remove default padding since navbar is centered */
+            font-size: 14px; /* Base font size - reduced from default 16px */
+        }
+
+        /* Headings - reduced sizes */
+        h1 { font-size: 1.75rem; } /* ~28px */
+        h2 { font-size: 1.5rem; }  /* ~24px */
+        h3 { font-size: 1.25rem; } /* ~20px */
+        h4 { font-size: 1.1rem; }  /* ~17.6px */
+        h5 { font-size: 1rem; }    /* ~16px */
+        h6 { font-size: 0.95rem; } /* ~15.2px */
+
+        /* Buttons - consistent sizing */
+        .btn {
+            font-size: 14px;
+        }
+        .btn-sm {
+            font-size: 13px;
+        }
+        .btn-lg {
+            font-size: 15px;
         }
 
         main {
@@ -75,7 +95,7 @@
 
         .navbar-brand {
             font-weight: 800;
-            font-size: 1.25rem; /* slightly smaller to help reduce height */
+            font-size: 1.1rem; /* Reduced from 1.25rem */
             color: rgba(255,255,255,0.98) !important;
             text-shadow: 0 2px 6px rgba(0, 0, 0, 0.14);
             letter-spacing: 0.2px;
@@ -91,7 +111,7 @@
             padding: 0.28rem 0.6rem; /* tighter vertical/horizontal padding */
             border-radius: 6px;
             margin: 0 0.15rem;
-            font-size: 0.92rem; /* slightly smaller text */
+            font-size: 13px; /* Fixed 13px */
             line-height: 1.1;
         }
 
@@ -251,25 +271,47 @@
         
         .book-card .card-title {
             transition: color 0.3s ease;
+            font-size: 13px; /* Reduced for compact cards */
+            line-height: 1.3;
+            min-height: 35px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         .book-card:hover .card-title {
             color: #0d6efd;
         }
         
+        /* Custom 5-column grid for XL screens */
+        @media (min-width: 1200px) {
+            .col-xl-2-4 {
+                flex: 0 0 20%;
+                max-width: 20%;
+            }
+        }
+        
+        .book-card .card-text {
+            font-size: 13px; /* Book details text */
+        }
+        
         .price {
             color: #e74c3c;
             font-weight: bold;
+            font-size: 15px;
         }
         
         .sale-price {
             color: #27ae60;
             font-weight: bold;
+            font-size: 15px;
         }
         
         .original-price {
             text-decoration: line-through;
             color: #7f8c8d;
+            font-size: 13px;
         }
 
         /* Category card hover effect */
@@ -465,6 +507,354 @@
     <!-- Remove the aggressive font override -->
     <style>
         /* All font styles are now handled by the body font-family and Bootstrap defaults */
+    </style>
+    
+    <!-- Flash Sale Section Styles -->
+    <style>
+        .flash-sale-section {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        /* Decorative shapes */
+        .flash-sale-shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        
+        .flash-sale-shape.shape-1 {
+            width: 200px;
+            height: 200px;
+            top: -50px;
+            left: -50px;
+        }
+        
+        .flash-sale-shape.shape-2 {
+            width: 150px;
+            height: 150px;
+            top: 50%;
+            right: 5%;
+            transform: translateY(-50%);
+        }
+        
+        .flash-sale-shape.shape-3 {
+            width: 100px;
+            height: 100px;
+            bottom: -30px;
+            left: 20%;
+        }
+        
+        .flash-sale-shape.shape-4 {
+            width: 120px;
+            height: 120px;
+            top: 20px;
+            right: 15%;
+        }
+        
+        /* Header */
+        .flash-sale-header {
+            position: relative;
+            z-index: 10;
+        }
+        
+        .flash-icon-wrapper {
+            width: 48px;
+            height: 48px;
+            background: #fff;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .flash-icon {
+            width: 28px;
+            height: 28px;
+            color: #ff6b6b;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .flash-sale-title {
+            color: #fff;
+            font-weight: 700;
+            font-size: 22px; /* Reduced from 28px */
+            letter-spacing: 0.5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Timer */
+        .flash-sale-timer {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .timer-label {
+            color: #fff;
+            font-size: 13px; /* Reduced from 14px */
+            font-weight: 500;
+        }
+        
+        .timer-box {
+            background: #000;
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 16px; /* Reduced from 18px */
+            font-weight: 700;
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        .timer-separator {
+            color: #fff;
+            font-size: 18px; /* Reduced from 20px */
+            font-weight: 700;
+        }
+        
+        .btn-see-all {
+            background: #fff;
+            color: #ff6b6b;
+            padding: 8px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-see-all:hover {
+            background: #000;
+            color: #fff;
+            transform: translateX(5px);
+        }
+        
+        /* Carousel */
+        .flash-sale-carousel-wrapper {
+            position: relative;
+            z-index: 10;
+        }
+        
+        .flash-sale-carousel {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding: 10px 0 20px;
+            scrollbar-width: none;
+        }
+        
+        .flash-sale-carousel::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .flash-sale-item {
+            flex: 0 0 auto;
+            width: 220px;
+        }
+        
+        .flash-sale-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 12px;
+            display: block;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            height: 100%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .flash-sale-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .flash-sale-image {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+        
+        .flash-sale-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 10px;
+        }
+        
+        .flash-sale-image .no-image {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ccc;
+        }
+        
+        .flash-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #000;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        .flash-sale-book-title {
+            font-size: 13px; /* Reduced from 14px */
+            color: #000;
+            margin-bottom: 8px;
+            min-height: 40px;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+        
+        .flash-sale-price {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+        
+        .price-flash {
+            color: #ff6b6b;
+            font-size: 16px; /* Reduced from 18px */
+            font-weight: 700;
+        }
+        
+        .price-discount {
+            background: #ff6b6b;
+            color: #fff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        .price-original {
+            color: #999;
+            text-decoration: line-through;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+        
+        .flash-sale-progress {
+            margin-top: auto;
+        }
+        
+        .flash-sale-progress .progress {
+            height: 6px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 6px;
+        }
+        
+        .flash-sale-progress .progress-bar {
+            background: linear-gradient(90deg, #ff6b6b 0%, #ff8787 100%);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-label {
+            color: #666;
+            font-size: 13px;
+        }
+        
+        /* Carousel navigation */
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #fff;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 20;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .carousel-nav:hover {
+            background: #000;
+            color: #fff;
+        }
+        
+        .carousel-prev {
+            left: -20px;
+        }
+        
+        .carousel-next {
+            right: -20px;
+        }
+        
+        .carousel-nav svg {
+            width: 20px;
+            height: 20px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .flash-sale-title {
+                font-size: 20px;
+            }
+            
+            .flash-icon-wrapper {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .flash-icon {
+                width: 24px;
+                height: 24px;
+            }
+            
+            .timer-box {
+                padding: 4px 8px;
+                font-size: 16px;
+                min-width: 35px;
+            }
+            
+            .flash-sale-item {
+                width: 180px;
+            }
+            
+            .carousel-nav {
+                display: none;
+            }
+            
+            .flash-sale-header {
+                flex-direction: column;
+                align-items: flex-start !important;
+                gap: 15px;
+            }
+        }
     </style>
 </head>
 <body>

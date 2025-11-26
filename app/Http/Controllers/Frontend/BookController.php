@@ -70,7 +70,14 @@ class BookController extends Controller
         $minPrice = Book::min('price');
         $maxPrice = Book::max('price');
         
-        return view('frontend.books.index', compact('books', 'categories', 'minPrice', 'maxPrice'));
+        // Get active flash sale items for price override
+        $flashSaleItems = \App\Models\FlashSaleItem::whereHas('flashSale', function($query) {
+            $query->active();
+        })
+        ->whereColumn('sold_quantity', '<', 'stock_quantity')
+        ->pluck('flash_price', 'book_id');
+        
+        return view('frontend.books.index', compact('books', 'categories', 'minPrice', 'maxPrice', 'flashSaleItems'));
     }
     
     public function show($id)
@@ -81,6 +88,14 @@ class BookController extends Controller
                            ->take(4)
                            ->get();
         
-        return view('frontend.books.show', compact('book', 'relatedBooks'));
+        // Check if book is in active flash sale
+        $flashSaleItem = \App\Models\FlashSaleItem::whereHas('flashSale', function($query) {
+            $query->active();
+        })
+        ->where('book_id', $id)
+        ->whereColumn('sold_quantity', '<', 'stock_quantity')
+        ->first();
+        
+        return view('frontend.books.show', compact('book', 'relatedBooks', 'flashSaleItem'));
     }
 }

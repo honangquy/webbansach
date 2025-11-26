@@ -21,15 +21,26 @@ class CartController extends Controller
         $total = 0;
         $cartItems = [];
         
+        // Get active flash sale items
+        $flashSaleItems = \App\Models\FlashSaleItem::whereHas('flashSale', function($query) {
+            $query->where('status', 1) // status is boolean in database
+                  ->where('start_time', '<=', now())
+                  ->where('end_time', '>=', now());
+        })->pluck('flash_price', 'book_id');
+        
         foreach ($cart as $id => $details) {
             $book = Book::find($id);
             if ($book) {
-                $price = $book->sale_price ?? $book->price;
+                // Priority: Flash Sale > Sale Price > Regular Price
+                $price = $flashSaleItems[$id] ?? ($book->sale_price ?? $book->price);
+                $isFlashSale = isset($flashSaleItems[$id]);
+                
                 $cartItems[] = [
                     'book' => $book,
                     'quantity' => $details['quantity'],
                     'price' => $price,
-                    'subtotal' => $price * $details['quantity']
+                    'subtotal' => $price * $details['quantity'],
+                    'is_flash_sale' => $isFlashSale
                 ];
                 $total += $price * $details['quantity'];
             }
@@ -47,7 +58,8 @@ class CartController extends Controller
             foreach ($cart as $id => $details) {
                 $book = Book::find($id);
                 if ($book) {
-                    $price = $book->sale_price ?? $book->price;
+                    // Use flash sale price if available, otherwise sale_price or regular price
+                    $price = $flashSaleItems[$id] ?? ($book->sale_price ?? $book->price);
                     $lineTotal = $price * $details['quantity'];
                     if (empty($eligibleBookIds) || in_array($book->id, $eligibleBookIds)) {
                         $eligibleSubtotal += $lineTotal;

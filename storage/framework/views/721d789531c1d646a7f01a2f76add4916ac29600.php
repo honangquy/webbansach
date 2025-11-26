@@ -54,14 +54,26 @@
                                     <a href="<?php echo e(route('books.show', $item['book']->id)); ?>" class="text-decoration-none text-dark fw-bold"><?php echo e($item['book']->title); ?></a>
                                     <div class="text-muted small"><?php echo e($item['book']->author); ?></div>
                                     <div class="text-primary small"><?php echo e($item['book']->category->name); ?></div>
+                                    
+                                    <?php if(isset($item['is_flash_sale']) && $item['is_flash_sale']): ?>
+                                        <span class="badge bg-danger mt-1" style="font-size: 11px;">
+                                            <i class="fas fa-bolt"></i> FLASH SALE
+                                        </span>
+                                    <?php endif; ?>
                                 </div>
 
                                 <!-- Price -->
                                 <div class="text-center mx-4" style="min-width: 120px;">
-                                    <?php if($item['book']->sale_price && $item['book']->sale_price < $item['book']->price): ?>
+                                    <?php if(isset($item['is_flash_sale']) && $item['is_flash_sale']): ?>
+                                        
+                                        <div class="fw-bold text-danger"><?php echo e(number_format($item['price'])); ?>đ</div>
+                                        <small class="text-muted text-decoration-line-through"><?php echo e(number_format($item['book']->price)); ?>đ</small>
+                                    <?php elseif($item['book']->sale_price && $item['book']->sale_price < $item['book']->price): ?>
+                                        
                                         <div class="fw-bold text-danger"><?php echo e(number_format($item['price'])); ?>đ</div>
                                         <small class="text-muted text-decoration-line-through"><?php echo e(number_format($item['book']->price)); ?>đ</small>
                                     <?php else: ?>
+                                        
                                         <div class="fw-bold text-danger"><?php echo e(number_format($item['price'])); ?>đ</div>
                                     <?php endif; ?>
                                 </div>

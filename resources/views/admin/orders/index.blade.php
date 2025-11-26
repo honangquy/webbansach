@@ -334,7 +334,9 @@ function updateOrderStatus(orderId, newStatus, selectElement) {
         }
     });
 
-    $.post(`http://localhost/webbansach/laravel-app/public/admin/orders/${orderId}/update-status`, {
+    const updateUrl = '{{ route("admin.orders.index") }}/' + orderId + '/update-status';
+    
+    $.post(updateUrl, {
         status: newStatus,
         note: 'Cập nhật từ trang danh sách'
     })

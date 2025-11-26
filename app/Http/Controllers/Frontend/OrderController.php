@@ -31,18 +31,28 @@ class OrderController extends Controller
             return redirect()->route('cart.index')->with('error', 'Giỏ hàng của bạn đang trống!');
         }
         
+        // Get active flash sale items
+        $flashSaleItems = \App\Models\FlashSaleItem::whereHas('flashSale', function($query) {
+            $query->where('status', 1) // status is boolean in database
+                  ->where('start_time', '<=', now())
+                  ->where('end_time', '>=', now());
+        })->pluck('flash_price', 'book_id');
+        
         $cartItems = [];
         $total = 0;
         
         foreach ($cart as $id => $details) {
             $book = Book::find($id);
             if ($book) {
-                $price = $book->sale_price ?? $book->price;
+                // Priority: Flash Sale > Sale Price > Regular Price
+                $price = $flashSaleItems[$id] ?? ($book->sale_price ?? $book->price);
+                
                 $cartItems[] = [
                     'book' => $book,
                     'quantity' => $details['quantity'],
                     'price' => $price,
-                    'subtotal' => $price * $details['quantity']
+                    'subtotal' => $price * $details['quantity'],
+                    'is_flash_sale' => isset($flashSaleItems[$id])
                 ];
                 $total += $price * $details['quantity'];
             }
@@ -90,6 +100,13 @@ class OrderController extends Controller
         DB::beginTransaction();
         
         try {
+            // Get active flash sale items
+            $flashSaleItems = \App\Models\FlashSaleItem::whereHas('flashSale', function($query) {
+                $query->where('status', 1) // status is boolean in database
+                      ->where('start_time', '<=', now())
+                      ->where('end_time', '>=', now());
+            })->pluck('flash_price', 'book_id');
+            
             // Calculate total and validate stock
             $total = 0;
             $orderItems = [];
@@ -105,14 +122,16 @@ class OrderController extends Controller
                     throw new \Exception("Sách '{$book->title}' không đủ số lượng trong kho!");
                 }
                 
-                $price = $book->sale_price ?? $book->price;
+                // Priority: Flash Sale > Sale Price > Regular Price
+                $price = $flashSaleItems[$bookId] ?? ($book->sale_price ?? $book->price);
                 $subtotal = $price * $details['quantity'];
                 
                 $orderItems[] = [
                     'book' => $book,
                     'quantity' => $details['quantity'],
                     'price' => $price,
-                    'subtotal' => $subtotal
+                    'subtotal' => $subtotal,
+                    'is_flash_sale' => isset($flashSaleItems[$bookId])
                 ];
                 
                 $total += $subtotal;
@@ -130,7 +149,8 @@ class OrderController extends Controller
                 foreach ($cart as $id => $details) {
                     $book = Book::find($id);
                     if ($book) {
-                        $price = $book->sale_price ?? $book->price;
+                        // Use flash sale price if available
+                        $price = $flashSaleItems[$id] ?? ($book->sale_price ?? $book->price);
                         $lineTotal = $price * $details['quantity'];
                         if (empty($eligibleBookIds) || in_array($book->id, $eligibleBookIds)) {
                             $eligibleSubtotal += $lineTotal;

@@ -19,6 +19,70 @@ if ($banner) {
     .banner-media { position:relative; }
     .banner-media:hover .banner-caption, .banner-media:focus-within .banner-caption, .carousel-item:hover .banner-caption, .carousel-item:focus-within .banner-caption { opacity:1; transform: translateY(0); pointer-events:auto; }
     @media (max-width:768px) { .banner-caption { opacity:1; transform:none; pointer-events:auto; } }
+    
+    /* Decorative shapes for banner */
+    .banner-shape {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 0;
+    }
+    
+    .banner-shape-1 {
+        width: 300px;
+        height: 300px;
+        top: -100px;
+        left: -80px;
+        animation: float 20s ease-in-out infinite;
+    }
+    
+    .banner-shape-2 {
+        width: 200px;
+        height: 200px;
+        top: 30%;
+        right: -60px;
+        animation: float 15s ease-in-out infinite reverse;
+    }
+    
+    .banner-shape-3 {
+        width: 150px;
+        height: 150px;
+        bottom: -50px;
+        left: 15%;
+        animation: float 18s ease-in-out infinite;
+    }
+    
+    .banner-shape-4 {
+        width: 180px;
+        height: 180px;
+        top: 10%;
+        right: 20%;
+        animation: float 22s ease-in-out infinite;
+    }
+    
+    .banner-shape-5 {
+        width: 120px;
+        height: 120px;
+        bottom: 20%;
+        right: 10%;
+        animation: float 16s ease-in-out infinite reverse;
+    }
+    
+    @keyframes float {
+        0%, 100% {
+            transform: translate(0, 0) rotate(0deg);
+        }
+        25% {
+            transform: translate(10px, -10px) rotate(5deg);
+        }
+        50% {
+            transform: translate(-5px, 10px) rotate(-3deg);
+        }
+        75% {
+            transform: translate(-10px, -5px) rotate(7deg);
+        }
+    }
 </style>
 
 <style>
@@ -64,6 +128,13 @@ if ($banner) {
 
                 <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
                     <section class="hero-section position-relative text-white py-5" style="overflow:visible; background: #0e2a47;">
+                        <!-- Decorative shapes -->
+                        <div class="banner-shape banner-shape-1"></div>
+                        <div class="banner-shape banner-shape-2"></div>
+                        <div class="banner-shape banner-shape-3"></div>
+                        <div class="banner-shape banner-shape-4"></div>
+                        <div class="banner-shape banner-shape-5"></div>
+                        
                         <div class="position-absolute top-0 start-0 w-100 h-100" style="background: rgba(0,0,0,0.08); z-index:1;"></div>
                         <div class="container position-relative d-flex justify-content-center" style="z-index:2;">
                             <div class="card p-0 banner-card">
@@ -161,12 +232,21 @@ if ($banner) {
         </script>
     </div>
 @else
-    {{-- Single banner or no banner: render single centered white card (same visual) --}}
-    <div class="container d-flex justify-content-center">
-    <div class="card p-0 banner-card">
+    {{-- Single banner or no banner: render single centered white card with decorative shapes --}}
+    <section class="hero-section position-relative text-white py-5" style="overflow:visible; background: #0e2a47;">
+        <!-- Decorative shapes -->
+        <div class="banner-shape banner-shape-1"></div>
+        <div class="banner-shape banner-shape-2"></div>
+        <div class="banner-shape banner-shape-3"></div>
+        <div class="banner-shape banner-shape-4"></div>
+        <div class="banner-shape banner-shape-5"></div>
+        
+        <div class="position-absolute top-0 start-0 w-100 h-100" style="background: rgba(0,0,0,0.08); z-index:1;"></div>
+        <div class="container position-relative d-flex justify-content-center" style="z-index:2;">
+            <div class="card p-0 banner-card">
                 @if($imgSrc)
                     <div class="banner-media" style="position:relative; width:100%;">
-                                @if($banner && $banner->link)
+                        @if($banner && $banner->link)
                             <a href="{{ $banner->link }}">
                                 <img loading="lazy" src="{{ $imgSrc }}" alt="{{ $banner->title ?? 'Banner' }}" class="banner-img img-fluid mx-auto d-block" style="border-radius:6px;" />
                             </a>
@@ -188,13 +268,14 @@ if ($banner) {
                         </div>
                     </div>
                 @else
-                <div style="width:100%; height:260px; display:flex; align-items:center; justify-content:center;">
-                    <div class="text-center">
-                        <h3 class="mb-0">BookStore</h3>
-                        <p class="small mb-0">Khám phá bộ sưu tập sách của chúng tôi</p>
+                    <div style="width:100%; height:260px; display:flex; align-items:center; justify-content:center;">
+                        <div class="text-center">
+                            <h3 class="mb-0">BookStore</h3>
+                            <p class="small mb-0">Khám phá bộ sưu tập sách của chúng tôi</p>
+                        </div>
                     </div>
-                </div>
-            @endif
+                @endif
+            </div>
         </div>
-    </div>
+    </section>
 @endif

@@ -54,6 +54,7 @@
         body {
             font-family: Inter, "Inter Placeholder", sans-serif !important;
             animation: fadeInPage 0.5s ease-in-out;
+            font-size: 14px; /* Base font size for admin panel */
         }
         
         .sidebar {
@@ -80,7 +81,7 @@
             transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
-            font-size: 0.95rem;
+            font-size: 13px; /* Fixed 13px */
             font-weight: 500;
             text-decoration: none;
             position: relative;
@@ -176,12 +177,12 @@
         }
 
         .top-navbar h4 {
-            font-size: 1.15rem;
+            font-size: 1rem; /* Reduced from 1.15rem */
             margin-bottom: 0;
         }
 
         .top-navbar .text-muted {
-            font-size: 0.9rem;
+            font-size: 13px; /* Fixed 13px */
         }
         
         .stats-card {
@@ -189,7 +190,7 @@
             color: white;
             border-radius: 10px;
             animation: fadeInPage 0.5s ease-in-out 0.2s both;
-            font-size: 0.95rem;
+            font-size: 13px; /* Fixed 13px */
         }
         
         .stats-card-2 {
@@ -197,7 +198,7 @@
             color: white;
             border-radius: 10px;
             animation: fadeInPage 0.5s ease-in-out 0.25s both;
-            font-size: 0.95rem;
+            font-size: 13px; /* Fixed 13px */
         }
         
         .stats-card-3 {
@@ -205,7 +206,7 @@
             color: white;
             border-radius: 10px;
             animation: fadeInPage 0.5s ease-in-out 0.3s both;
-            font-size: 0.95rem;
+            font-size: 13px; /* Fixed 13px */
         }
         
         .stats-card-4 {
@@ -213,7 +214,7 @@
             color: white;
             border-radius: 10px;
             animation: fadeInPage 0.5s ease-in-out 0.35s both;
-            font-size: 0.95rem;
+            font-size: 13px; /* Fixed 13px */
         }
         
         .content-wrapper {
@@ -226,19 +227,27 @@
         }
 
         table {
-            font-size: 0.95rem;
+            font-size: 13px; /* Fixed 13px for tables */
         }
 
-        .btn, .btn-sm, .btn-lg {
-            font-size: 0.95rem;
+        .btn {
+            font-size: 14px; /* Fixed 14px for buttons */
+        }
+        
+        .btn-sm {
+            font-size: 13px; /* Fixed 13px for small buttons */
+        }
+        
+        .btn-lg {
+            font-size: 15px; /* Fixed 15px for large buttons */
         }
 
-        .form-control, .form-select, select {
-            font-size: 0.95rem;
+        .form-control, .form-select, select, input, textarea {
+            font-size: 14px; /* Fixed 14px for form elements */
         }
 
         .alert {
-            font-size: 0.95rem;
+            font-size: 14px; /* Fixed 14px for alerts */
             animation: fadeInPage 0.4s ease-in-out;
         }
 
@@ -247,23 +256,23 @@
         }
 
         .card-title {
-            font-size: 1.1rem;
+            font-size: 1rem; /* Reduced from 1.1rem */
         }
 
         .card-body {
-            font-size: 0.95rem;
+            font-size: 14px; /* Fixed 14px */
         }
 
         label, .label {
-            font-size: 0.95rem;
+            font-size: 14px; /* Fixed 14px for labels */
         }
 
-        h1 { font-size: 1.75rem; }
-        h2 { font-size: 1.5rem; }
-        h3 { font-size: 1.25rem; }
-        h4 { font-size: 1.1rem; }
-        h5 { font-size: 1rem; }
-        h6 { font-size: 0.95rem; }
+        h1 { font-size: 1.5rem; }   /* Reduced from 1.75rem */
+        h2 { font-size: 1.35rem; }  /* Reduced from 1.5rem */
+        h3 { font-size: 1.15rem; }  /* Reduced from 1.25rem */
+        h4 { font-size: 1rem; }     /* Reduced from 1.1rem */
+        h5 { font-size: 0.95rem; }  /* Reduced from 1rem */
+        h6 { font-size: 0.9rem; }   /* Reduced from 0.95rem */
         
         @media (max-width: 768px) {
             .sidebar {
@@ -440,6 +449,15 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                         </svg>
                         <span class="nav-label">Banner</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.flash-sales.*') ? 'active' : '' }}" href="{{ route('admin.flash-sales.index') }}">
+                        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                        <span class="nav-label">Flash Sale</span>
                     </a>
                 </li>
                 

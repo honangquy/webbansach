@@ -13,15 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('cart_items', function (Blueprint $table) {
+        Schema::create('flash_sales', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('book_id')->constrained()->onDelete('cascade');
-            $table->integer('quantity')->default(1);
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->dateTime('start_time');
+            $table->dateTime('end_time');
+            $table->boolean('status')->default(true);
             $table->timestamps();
-            
-            // Unique constraint to prevent duplicate entries
-            $table->unique(['user_id', 'book_id']);
         });
     }
 
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cart_items');
+        Schema::dropIfExists('flash_sales');
     }
 };

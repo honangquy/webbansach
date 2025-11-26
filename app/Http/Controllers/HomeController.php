@@ -30,11 +30,11 @@ class HomeController extends Controller
             ->limit(8)
             ->get();
             
-        // Get latest books
+        // Get latest books - 6 rows x 5 products = 30 books
         $latestBooks = \App\Models\Book::where('status', true)
             ->orderBy('created_at', 'desc')
             ->with('category')
-            ->limit(8)
+            ->limit(30)
             ->get();
             
         // Get all categories
@@ -51,7 +51,23 @@ class HomeController extends Controller
             })
             ->orderBy('created_at', 'desc')
             ->get();
+            
+        // Get active flash sale
+        $activeFlashSale = \App\Models\FlashSale::active()
+            ->with(['items' => function($query) {
+                $query->whereColumn('sold_quantity', '<', 'stock_quantity')
+                    ->with(['book' => function($q) {
+                        $q->where('status', true);
+                    }]);
+            }])
+            ->first();
+            
+        // Get flash sale items for price display
+        $flashSaleItems = collect();
+        if($activeFlashSale) {
+            $flashSaleItems = $activeFlashSale->items->pluck('flash_price', 'book_id');
+        }
 
-        return view('frontend.home', compact('featuredBooks', 'latestBooks', 'categories', 'banners'));
+        return view('frontend.home', compact('featuredBooks', 'latestBooks', 'categories', 'banners', 'activeFlashSale', 'flashSaleItems'));
     }
 }

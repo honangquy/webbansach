@@ -5,6 +5,9 @@
 <?php $__env->startSection('content'); ?>
 <?php echo $__env->make('frontend.partials.banner', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
+<!-- Flash Sale Section -->
+<?php echo $__env->make('frontend.partials.flash-sale', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+
 <!-- Categories Section -->
 <section class="py-5 bg-light">
     <div class="container">
@@ -144,85 +147,83 @@
 <!-- Latest Books Section -->
 <section class="py-5 bg-light">
     <div class="container">
-        <div class="d-flex justify-content-between align-items-center mb-5">
-            <h2>Sách mới nhất</h2>
-            <a href="<?php echo e(route('books.index', ['sort' => 'latest'])); ?>" class="btn btn-outline-primary">
-                Xem tất cả <i class="fas fa-arrow-right"></i>
-            </a>
+        <div class="mb-4">
+            <h2 class="mb-1">Sách mới nhất</h2>
+            <p class="text-muted small mb-0">Khám phá những đầu sách mới nhất vừa được cập nhật</p>
         </div>
         
-        <div class="row">
+        <div class="row g-3">
             <?php $__empty_1 = true; $__currentLoopData = $latestBooks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $book): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="col-xl-2-4 col-lg-3 col-md-4 col-sm-6 col-6 mb-3">
                 <a href="<?php echo e(route('books.show', $book->id)); ?>" class="card h-100 shadow-sm text-decoration-none text-dark book-card">
                     <div class="position-relative">
                         <?php if($book->image): ?>
-                            <img src="<?php echo e($book->image_url); ?>" class="card-img-top" alt="<?php echo e($book->title); ?>" style="height: 250px; object-fit: contain; padding: 10px;">
+                            <img src="<?php echo e($book->image_url); ?>" class="card-img-top" alt="<?php echo e($book->title); ?>" style="height: 200px; object-fit: contain; padding: 8px;">
                         <?php else: ?>
-                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 250px;">
-                                <i class="fas fa-book fa-3x text-muted"></i>
+                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <i class="fas fa-book fa-2x text-muted"></i>
                             </div>
                         <?php endif; ?>
                         
                         <?php if($book->sale_price && $book->sale_price < $book->price): ?>
-                            <span class="badge bg-danger position-absolute top-0 start-0 m-2">
-                                Giảm <?php echo e(round((($book->price - $book->sale_price) / $book->price) * 100)); ?>%
+                            <span class="badge bg-danger position-absolute top-0 start-0 m-1" style="font-size: 10px;">
+                                -<?php echo e(round((($book->price - $book->sale_price) / $book->price) * 100)); ?>%
                             </span>
                         <?php endif; ?>
                         
-                        <span class="badge bg-info position-absolute top-0 end-0 m-2">
+                        <span class="badge bg-info position-absolute top-0 end-0 m-1" style="font-size: 10px;">
                             <i class="fas fa-clock"></i> Mới
                         </span>
                     </div>
                     
-                    <div class="card-body d-flex flex-column">
-                        <h6 class="card-title flex-grow-1"><?php echo e(Str::limit($book->title, 50)); ?></h6>
-                        <p class="text-muted small mb-2"><?php echo e($book->author); ?></p>
-                        <p class="text-primary small mb-2"><?php echo e($book->category->name); ?></p>
+                    <div class="card-body d-flex flex-column p-2">
+                        <h6 class="card-title flex-grow-1 mb-1"><?php echo e(Str::limit($book->title, 45)); ?></h6>
+                        <p class="text-muted small mb-1" style="font-size: 12px;"><?php echo e(Str::limit($book->author, 25)); ?></p>
+                        <p class="text-primary small mb-2" style="font-size: 12px;"><?php echo e($book->category->name); ?></p>
                         
                         
-                        <div class="mb-2">
+                        <div class="mb-1" style="font-size: 11px;">
                             <?php
                                 $avg = $book->average_rating;
                                 $count = $book->reviews()->count();
                             ?>
                             <?php if($avg): ?>
                                 <div class="d-flex align-items-center">
-                                    <div class="me-2">
+                                    <div class="me-1">
                                         <?php for($i=1;$i<=5;$i++): ?>
                                             <?php if($i <= floor($avg)): ?>
-                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="fas fa-star text-warning" style="font-size: 10px;"></i>
                                             <?php elseif($i - $avg < 1 && $i - $avg > 0): ?>
-                                                <i class="fas fa-star-half-alt text-warning"></i>
+                                                <i class="fas fa-star-half-alt text-warning" style="font-size: 10px;"></i>
                                             <?php else: ?>
-                                                <i class="far fa-star text-warning"></i>
+                                                <i class="far fa-star text-warning" style="font-size: 10px;"></i>
                                             <?php endif; ?>
                                         <?php endfor; ?>
                                     </div>
-                                    <div class="small text-muted">
-                                        (<?php echo e($count); ?> đánh giá)
-                                    </div>
+                                    <span class="text-muted" style="font-size: 11px;">(<?php echo e($count); ?>)</span>
                                 </div>
                             <?php else: ?>
-                                <span class="text-muted small">Chưa có đánh giá</span>
+                                <span class="text-muted" style="font-size: 11px;">Chưa có đánh giá</span>
                             <?php endif; ?>
                         </div>
 
                         <div class="mt-auto">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
+                            <div class="d-flex flex-column gap-1">
+                                <div class="d-flex justify-content-between align-items-center">
                                     <?php if($book->sale_price && $book->sale_price < $book->price): ?>
-                                        <span class="h6 text-danger mb-0"><?php echo e(number_format($book->sale_price)); ?>đ</span>
-                                        <small class="text-muted text-decoration-line-through"><?php echo e(number_format($book->price)); ?>đ</small>
+                                        <div>
+                                            <div class="fw-bold text-danger" style="font-size: 14px;"><?php echo e(number_format($book->sale_price)); ?>đ</div>
+                                            <small class="text-muted text-decoration-line-through" style="font-size: 11px;"><?php echo e(number_format($book->price)); ?>đ</small>
+                                        </div>
                                     <?php else: ?>
-                                        <span class="h6 text-danger mb-0"><?php echo e(number_format($book->price)); ?>đ</span>
+                                        <div class="fw-bold text-danger" style="font-size: 14px;"><?php echo e(number_format($book->price)); ?>đ</div>
+                                    <?php endif; ?>
+                                    <?php if($book->stock_quantity > 0): ?>
+                                        <span class="badge bg-success" style="font-size: 10px;">Còn hàng</span>
+                                    <?php else: ?>
+                                        <span class="badge bg-secondary" style="font-size: 10px;">Hết hàng</span>
                                     <?php endif; ?>
                                 </div>
-                                <?php if($book->stock_quantity > 0): ?>
-                                    <span class="badge bg-success">Còn hàng</span>
-                                <?php else: ?>
-                                    <span class="badge bg-secondary">Hết hàng</span>
-                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
@@ -235,6 +236,13 @@
                 <p class="text-muted">Các sách mới nhất sẽ được hiển thị tại đây.</p>
             </div>
             <?php endif; ?>
+        </div>
+        
+        <!-- View All Button -->
+        <div class="text-center mt-4">
+            <a href="<?php echo e(route('books.index', ['sort' => 'latest'])); ?>" class="btn btn-primary btn-lg px-5">
+                <i class="fas fa-book-open me-2"></i>Xem tất cả sách mới
+            </a>
         </div>
     </div>
 </section>

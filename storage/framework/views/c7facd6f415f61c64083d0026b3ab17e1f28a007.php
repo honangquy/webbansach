@@ -47,7 +47,27 @@
 
                     <!-- Price -->
                     <div class="bg-light p-3 rounded mb-4">
-                        <?php if($book->sale_price && $book->sale_price < $book->price): ?>
+                        <?php if($flashSaleItem): ?>
+                            <!-- Flash Sale Price -->
+                            <div class="flash-sale-badge mb-2">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" fill="#ff6b6b"/>
+                                </svg>
+                                <span class="text-danger fw-bold">ĐANG FLASH SALE!</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-3">
+                                <span class="h3 fw-bold text-danger mb-0"><?php echo e(number_format($flashSaleItem->flash_price)); ?>đ</span>
+                                <span class="h5 text-muted text-decoration-line-through mb-0">
+                                    <?php echo e(number_format($book->price)); ?>đ
+                                </span>
+                                <span class="badge bg-danger fs-6">
+                                    -<?php echo e($flashSaleItem->discount_percent); ?>%
+                                </span>
+                            </div>
+                            <div class="mt-2">
+                                <small class="text-muted">Còn <?php echo e($flashSaleItem->remaining_stock); ?> sản phẩm với giá Flash Sale</small>
+                            </div>
+                        <?php elseif($book->sale_price && $book->sale_price < $book->price): ?>
                             <div class="d-flex align-items-center gap-3">
                                 <span class="h3 fw-bold text-danger mb-0"><?php echo e(number_format($book->sale_price)); ?>đ</span>
                                 <span class="h5 text-muted text-decoration-line-through mb-0">
