@@ -9,12 +9,14 @@
 <?php echo $__env->make('frontend.partials.flash-sale', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 <!-- Categories Section -->
-<section class="py-5 bg-light">
+<section class="py-5 bg-light categories-section">
     <div class="container">
-        <h2 class="text-center mb-5">Danh mục sách</h2>
-        <div class="row">
+        <h2 class="text-center mb-4">Danh mục sách</h2>
+        
+        <!-- Desktop Grid -->
+        <div class="row d-none d-md-flex">
             <?php $__currentLoopData = $categories->take(8); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="col-lg-3 col-md-4 mb-4">
                 <a href="<?php echo e(route('books.index', ['category' => $category->id])); ?>" 
                    class="card h-100 text-center border-0 shadow-sm text-decoration-none text-white category-card 
                    <?php switch($category->name):
@@ -36,6 +38,33 @@
                 </a>
             </div>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        </div>
+
+        <!-- Mobile Horizontal Scroll -->
+        <div class="categories-mobile-wrapper d-md-none">
+            <div class="categories-mobile-scroll">
+                <?php $__currentLoopData = $categories->take(8); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <a href="<?php echo e(route('books.index', ['category' => $category->id])); ?>" 
+                   class="category-mobile-item 
+                   <?php switch($category->name):
+                        case ('Tiểu thuyết'): ?> category-novel <?php break; ?>
+                        <?php case ('Kinh tế - Quản lý'): ?> category-business <?php break; ?>
+                        <?php case ('Tâm lý - Kỹ năng sống'): ?> category-psychology <?php break; ?>
+                        <?php case ('Sách thiếu nhi'): ?> category-children <?php break; ?>
+                        <?php case ('Sách giáo khoa'): ?> category-education <?php break; ?>
+                        <?php case ('Khoa học kỹ thuật'): ?> category-science <?php break; ?>
+                        <?php case ('Văn học Việt Nam'): ?> category-vietnamese-literature <?php break; ?>
+                        <?php case ('Lịch sử'): ?> category-history <?php break; ?>
+                        <?php default: ?> category-default 
+                   <?php endswitch; ?>">
+                    <div class="category-mobile-overlay"></div>
+                    <div class="category-mobile-content">
+                        <span class="category-mobile-title"><?php echo e($category->name); ?></span>
+                        <span class="category-mobile-count"><?php echo e($category->books_count ?? 0); ?> sách</span>
+                    </div>
+                </a>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </div>
         </div>
     </div>
 </section>
@@ -268,6 +297,8 @@
 
 <?php $__env->startPush('styles'); ?>
 <style>
+/* ========== RESPONSIVE IMPROVEMENTS ========== */
+
 /* Featured section base */
 .featured-section { position: relative; color: #fff; overflow: hidden; min-height: 360px; }
 .featured-section .container { position: relative; z-index: 4; }
@@ -286,7 +317,17 @@
 .featured-video { image-rendering: auto; }
 
 /* Responsive: hide video on small devices to save bandwidth */
-@media (max-width: 768px) { .featured-video-wrapper { display: none; } .featured-section { background-image: url('https://i.pinimg.com/1200x/f0/35/5b/f0355b591961ee01c5ee0c519976f347.jpg'); background-size: cover; background-position: center; } }
+@media (max-width: 768px) { 
+    .featured-video-wrapper { display: none; } 
+    .featured-section { 
+        background-image: url('https://i.pinimg.com/1200x/f0/35/5b/f0355b591961ee01c5ee0c519976f347.jpg'); 
+        background-size: cover; 
+        background-position: center; 
+        min-height: 280px;
+    }
+    .featured-section h2 { font-size: 1.25rem !important; }
+    .featured-section .btn { font-size: 12px; padding: 6px 12px; }
+}
 
 /* Carousel styling */
 .featured-carousel-wrapper { overflow: hidden; padding: 0.75rem 0; position: relative; z-index: 4; }
@@ -303,6 +344,233 @@
 
 @media (max-width: 992px) { .featured-item { flex: 0 0 180px; max-width: 180px; } }
 @media (max-width: 576px) { .featured-item { flex: 0 0 140px; max-width: 140px; } }
+
+/* ========== CATEGORIES SECTION RESPONSIVE ========== */
+/* Mobile Horizontal Scroll Categories */
+.categories-mobile-wrapper {
+    margin: 0 -12px;
+    padding: 0 12px;
+}
+
+.categories-mobile-scroll {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    padding: 8px 4px 16px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.categories-mobile-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.category-mobile-item {
+    flex: 0 0 140px;
+    min-width: 140px;
+    height: 100px;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.category-mobile-item:active {
+    transform: scale(0.97);
+}
+
+.category-mobile-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.4) 100%);
+    z-index: 1;
+}
+
+.category-mobile-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 8px;
+}
+
+.category-mobile-title {
+    display: block;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 4px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.category-mobile-count {
+    display: block;
+    color: rgba(255,255,255,0.75);
+    font-size: 11px;
+    font-weight: 500;
+}
+
+/* Desktop grid categories */
+@media (max-width: 991px) {
+    .category-card {
+        min-height: 160px !important;
+    }
+}
+@media (max-width: 767px) {
+    .category-card {
+        min-height: 140px !important;
+    }
+    .category-card .card-title {
+        font-size: 14px !important;
+    }
+    .category-card .card-text {
+        font-size: 12px !important;
+    }
+}
+@media (max-width: 575px) {
+    .category-card {
+        min-height: 120px !important;
+    }
+}
+
+/* ========== BOOK CARDS RESPONSIVE ========== */
+.book-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.book-card:hover {
+    transform: translateY(-4px);
+}
+
+/* Mobile book card adjustments */
+@media (max-width: 767px) {
+    .book-card .card-img-top {
+        height: 160px !important;
+    }
+    .book-card .card-title {
+        font-size: 12px !important;
+        min-height: 32px !important;
+    }
+    .book-card .card-body {
+        padding: 8px !important;
+    }
+    .book-card .fw-bold {
+        font-size: 13px !important;
+    }
+}
+
+@media (max-width: 575px) {
+    .book-card .card-img-top {
+        height: 140px !important;
+    }
+    .book-card .card-title {
+        font-size: 11px !important;
+        min-height: 28px !important;
+        -webkit-line-clamp: 2;
+    }
+    .book-card .text-muted.small,
+    .book-card .text-primary.small {
+        font-size: 10px !important;
+    }
+    .book-card .badge {
+        font-size: 9px !important;
+        padding: 2px 4px !important;
+    }
+}
+
+/* ========== SECTION HEADINGS RESPONSIVE ========== */
+section h2 {
+    font-size: 1.5rem;
+}
+@media (max-width: 767px) {
+    section h2 {
+        font-size: 1.25rem;
+    }
+    section.py-5 {
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+    }
+}
+@media (max-width: 575px) {
+    section h2 {
+        font-size: 1.1rem;
+    }
+    section.py-5 {
+        padding-top: 1.5rem !important;
+        padding-bottom: 1.5rem !important;
+    }
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+}
+
+/* ========== NEWSLETTER SECTION RESPONSIVE ========== */
+@media (max-width: 767px) {
+    .bg-primary.text-white h3 {
+        font-size: 1.25rem;
+    }
+    .bg-primary.text-white p {
+        font-size: 13px;
+    }
+    .bg-primary.text-white form {
+        flex-direction: column;
+    }
+    .bg-primary.text-white .form-control {
+        margin-bottom: 10px;
+    }
+}
+
+/* ========== GENERAL SPACING IMPROVEMENTS ========== */
+@media (max-width: 767px) {
+    .mb-4 {
+        margin-bottom: 1rem !important;
+    }
+    .mb-5 {
+        margin-bottom: 2rem !important;
+    }
+    .g-3 {
+        --bs-gutter-x: 0.5rem;
+        --bs-gutter-y: 0.5rem;
+    }
+}
+
+/* ========== ROW ADJUSTMENTS FOR MOBILE ========== */
+@media (max-width: 575px) {
+    .row.g-3 > [class*="col-"] {
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+}
+
+/* ========== BUTTON RESPONSIVE ========== */
+@media (max-width: 575px) {
+    .btn-lg {
+        font-size: 13px !important;
+        padding: 10px 20px !important;
+    }
+    .btn-outline-light,
+    .btn-primary {
+        font-size: 12px;
+    }
+}
+
+/* ========== HIDE LESS IMPORTANT ELEMENTS ON MOBILE ========== */
+@media (max-width: 575px) {
+    .book-card .text-muted.small:last-of-type,
+    .book-card .text-primary.small {
+        display: none;
+    }
+}
 </style>
 <?php $__env->stopPush(); ?>
 

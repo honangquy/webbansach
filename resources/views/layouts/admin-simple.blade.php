@@ -24,10 +24,32 @@
             }
         }
 
+        /* Ensure modals and popups are always clickable - override any animation issues */
+        .modal,
+        .modal-dialog,
+        .modal-content,
+        .modal-backdrop,
+        .dropdown-menu,
+        .popover,
+        .tooltip,
+        [role="dialog"],
+        [aria-modal="true"] {
+            animation: none !important;
+            pointer-events: auto !important;
+        }
+        
+        .modal.show {
+            pointer-events: auto !important;
+        }
+        
+        .modal-backdrop.show {
+            pointer-events: auto !important;
+        }
+
         /* Inter font for text elements - preserve icon fonts */
         body, html {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
-            animation: fadeInPage 0.5s ease-in-out;
+            /* animation removed */
         }
         
         /* Apply Inter to common text elements */
@@ -57,14 +79,14 @@
             top: 0;
             z-index: 1000;
             box-shadow: 0 8px 30px rgba(2,6,23,0.6);
-            animation: fadeInPage 0.5s ease-in-out;
+            /* animation removed */
             color: #cbd5e1;
         }
         
         .content-wrapper {
             margin-left: 250px;
             padding: 1.5rem;
-            animation: fadeInPage 0.5s ease-in-out 0.1s both;
+            /* animation removed */
         }
 
         .sidebar-header h4 {
@@ -158,12 +180,12 @@
             font-size: 1.1rem;
         }
 
-        h1 { font-size: 1.65rem; animation: fadeInPage 0.5s ease-in-out 0.15s both; }
-        h2 { font-size: 1.4rem; animation: fadeInPage 0.5s ease-in-out 0.15s both; }
-        h3 { font-size: 1.2rem; animation: fadeInPage 0.5s ease-in-out 0.15s both; }
-        h4 { font-size: 1.05rem; animation: fadeInPage 0.5s ease-in-out 0.15s both; }
-        h5 { font-size: 0.95rem; animation: fadeInPage 0.5s ease-in-out 0.15s both; }
-        h6 { font-size: 0.9rem; animation: fadeInPage 0.5s ease-in-out 0.15s both; }
+        h1 { font-size: 1.65rem; /* animation removed */ }
+        h2 { font-size: 1.4rem; /* animation removed */ }
+        h3 { font-size: 1.2rem; /* animation removed */ }
+        h4 { font-size: 1.05rem; /* animation removed */ }
+        h5 { font-size: 0.95rem; /* animation removed */ }
+        h6 { font-size: 0.9rem; /* animation removed */ }
 
         p, span, div, a, label {
             font-size: 0.95rem;
@@ -182,11 +204,11 @@
         }
 
         .card {
-            animation: fadeInPage 0.5s ease-in-out 0.2s both;
+            /* animation removed */
         }
 
         .container-fluid {
-            animation: fadeInPage 0.5s ease-in-out 0.2s both;
+            /* animation removed */
         }
     </style>
 </head>

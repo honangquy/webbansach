@@ -819,137 +819,608 @@
             height: 20px;
         }
         
-        /* Responsive */
-        @media (max-width: 768px) {
+        /* Flash Sale Responsive */
+        @media (max-width: 991px) {
             .flash-sale-title {
-                font-size: 20px;
+                font-size: 18px;
             }
-            
-            .flash-icon-wrapper {
-                width: 40px;
-                height: 40px;
+            .timer-label {
+                display: none;
             }
-            
-            .flash-icon {
-                width: 24px;
-                height: 24px;
-            }
-            
-            .timer-box {
-                padding: 4px 8px;
-                font-size: 16px;
-                min-width: 35px;
-            }
-            
             .flash-sale-item {
-                width: 180px;
+                width: 200px;
             }
-            
+        }
+        
+        @media (max-width: 768px) {
+            .flash-sale-section {
+                padding: 1rem 0 !important;
+            }
+            .flash-sale-title {
+                font-size: 16px;
+            }
+            .flash-icon-wrapper {
+                width: 36px;
+                height: 36px;
+            }
+            .flash-icon {
+                width: 20px;
+                height: 20px;
+            }
+            .timer-box {
+                padding: 4px 6px;
+                font-size: 14px;
+                min-width: 30px;
+            }
+            .timer-separator {
+                font-size: 14px;
+            }
+            .flash-sale-item {
+                width: 160px;
+            }
+            .flash-sale-image {
+                height: 160px;
+            }
+            .flash-sale-book-title {
+                font-size: 12px;
+                min-height: 34px;
+            }
+            .price-flash {
+                font-size: 14px;
+            }
+            .price-discount {
+                font-size: 11px;
+            }
             .carousel-nav {
                 display: none;
             }
-            
             .flash-sale-header {
                 flex-direction: column;
                 align-items: flex-start !important;
-                gap: 15px;
+                gap: 12px;
+            }
+            .btn-see-all {
+                padding: 6px 14px;
+                font-size: 12px;
+            }
+        }
+        
+        @media (max-width: 575px) {
+            .flash-sale-title {
+                font-size: 14px;
+            }
+            .flash-icon-wrapper {
+                width: 32px;
+                height: 32px;
+            }
+            .flash-icon {
+                width: 18px;
+                height: 18px;
+            }
+            .timer-box {
+                padding: 3px 5px;
+                font-size: 13px;
+                min-width: 26px;
+            }
+            .flash-sale-item {
+                width: 140px;
+            }
+            .flash-sale-image {
+                height: 140px;
+            }
+            .flash-sale-book-title {
+                font-size: 11px;
+                min-height: 30px;
+            }
+            .price-flash {
+                font-size: 13px;
+            }
+            .price-original {
+                font-size: 11px;
+            }
+            .flash-sale-card {
+                padding: 8px;
+            }
+            .flash-badge {
+                font-size: 10px;
+                padding: 2px 6px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="<?php echo e(route('home')); ?>">
-                 BookStore
-            </a>
-            
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <!-- Left Menu -->
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link <?php echo e(request()->routeIs('home') ? 'active' : ''); ?>" href="<?php echo e(route('home')); ?>">Trang chủ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?php echo e(request()->routeIs('books.*') ? 'active' : ''); ?>" href="<?php echo e(route('books.index')); ?>">Sách</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?php echo e(request()->routeIs('about') ? 'active' : ''); ?>" href="<?php echo e(route('about')); ?>">Giới thiệu</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?php echo e(request()->routeIs('contact') ? 'active' : ''); ?>" href="<?php echo e(route('contact')); ?>">Liên hệ</a>
-                    </li>
-                </ul>
-                
-                <!-- Search Form -->
-                <form class="d-flex me-3 search-form" method="GET" action="<?php echo e(route('books.index')); ?>">
-                    <input class="form-control me-2" type="search" name="search" placeholder="Tìm kiếm sách..." value="<?php echo e(request('search')); ?>">
-                    <button class="btn" type="submit">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </form>
-                
-                <!-- Right Menu -->
-                <ul class="navbar-nav">
-                    <?php if(auth()->guard()->guest()): ?>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?php echo e(route('login')); ?>">Đăng nhập</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?php echo e(route('register')); ?>">Đăng ký</a>
-                        </li>
-                    <?php else: ?>
-                        <!-- Cart -->
-                        <li class="nav-item">
-                            <a class="nav-link position-relative" href="<?php echo e(route('cart.index')); ?>">
-                                <i class="fas fa-shopping-cart"></i>
-                                <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill cart-badge">
-                                    0
-                                </span>
-                            </a>
-                        </li>
-                        
-                        <!-- User Menu -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                                <i class="fas fa-user"></i> <?php echo e(Auth::user()->name); ?>
+    <!-- Modern Dark Navigation Bar -->
+    <style>
+        .modern-nav {
+            background: linear-gradient(180deg, #0c0c1d 0%, #12122a 100%);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 1030;
+        }
+        .modern-nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            height: 60px;
+            position: relative;
+        }
+        /* Left: Logo */
+        .modern-nav .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            margin-right: 40px;
+        }
+        .modern-nav .nav-brand .brand-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modern-nav .nav-brand .brand-icon svg {
+            width: 18px;
+            height: 18px;
+            color: #fff;
+        }
+        .modern-nav .nav-brand .brand-text {
+            font-size: 20px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -0.5px;
+        }
+        /* Nav Links */
+        .modern-nav .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            flex: 1;
+        }
+        .modern-nav .nav-links a {
+            color: rgba(255,255,255,0.75);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.22s ease;
+            white-space: nowrap;
+        }
+        .modern-nav .nav-links a:hover,
+        .modern-nav .nav-links a.active {
+            color: #fff;
+            background: rgba(255,255,255,0.08);
+        }
+        .modern-nav .nav-links a.active {
+            border-bottom: 2px solid #a855f7;
+        }
+        /* Search Form */
+        .modern-nav .nav-search {
+            display: flex;
+            align-items: center;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 0 12px;
+            margin-right: 16px;
+            transition: all 0.22s ease;
+        }
+        .modern-nav .nav-search:focus-within {
+            background: rgba(255,255,255,0.12);
+            border-color: rgba(168,85,247,0.5);
+        }
+        .modern-nav .nav-search input {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 13px;
+            padding: 8px 10px;
+            width: 180px;
+            outline: none;
+        }
+        .modern-nav .nav-search input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+        .modern-nav .nav-search button {
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.6);
+            cursor: pointer;
+            padding: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modern-nav .nav-search button:hover {
+            color: #fff;
+        }
+        .modern-nav .nav-search button svg {
+            width: 18px;
+            height: 18px;
+        }
+        /* Right: Icons / Auth */
+        .modern-nav .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .modern-nav .nav-icon-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.22s ease;
+            text-decoration: none;
+            position: relative;
+        }
+        .modern-nav .nav-icon-btn:hover {
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+        }
+        .modern-nav .nav-icon-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+        .modern-nav .cart-badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: linear-gradient(135deg, #ef4444, #f97316);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* User dropdown */
+        .modern-nav .user-dropdown {
+            position: relative;
+        }
+        .modern-nav .user-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px;
+            color: rgba(255,255,255,0.85);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.22s ease;
+            text-decoration: none;
+        }
+        .modern-nav .user-btn:hover {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+        .modern-nav .user-avatar {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #7c3aed, #a855f7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .modern-nav .dropdown-menu {
+            background: #1a1a2e;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 8px;
+            min-width: 200px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            margin-top: 8px;
+        }
+        .modern-nav .dropdown-menu .dropdown-item {
+            color: rgba(255,255,255,0.8);
+            font-size: 13px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .modern-nav .dropdown-menu .dropdown-item:hover {
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+        }
+        .modern-nav .dropdown-menu .dropdown-item svg {
+            width: 16px;
+            height: 16px;
+            opacity: 0.7;
+        }
+        .modern-nav .dropdown-menu .dropdown-divider {
+            border-color: rgba(255,255,255,0.08);
+            margin: 6px 0;
+        }
+        /* Auth buttons for guest */
+        .modern-nav .auth-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.22s ease;
+        }
+        .modern-nav .auth-btn.login {
+            color: rgba(255,255,255,0.85);
+            background: transparent;
+        }
+        .modern-nav .auth-btn.login:hover {
+            color: #fff;
+            background: rgba(255,255,255,0.08);
+        }
+        .modern-nav .auth-btn.register {
+            color: #fff;
+            background: linear-gradient(135deg, #7c3aed, #a855f7);
+        }
+        .modern-nav .auth-btn.register:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        /* Mobile hamburger */
+        .modern-nav .mobile-toggle {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: transparent;
+            color: rgba(255,255,255,0.8);
+            cursor: pointer;
+            border-radius: 8px;
+            align-items: center;
+            justify-content: center;
+        }
+        .modern-nav .mobile-toggle:hover {
+            background: rgba(255,255,255,0.08);
+        }
+        .modern-nav .mobile-toggle svg {
+            width: 22px;
+            height: 22px;
+        }
+        /* Mobile menu */
+        .modern-nav .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: #0c0c1d;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding: 16px 24px;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 1040;
+        }
+        .modern-nav .mobile-menu.show {
+            display: flex;
+        }
+        .modern-nav .mobile-menu a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+        .modern-nav .mobile-menu a:hover {
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+        }
+        .modern-nav .mobile-search {
+            display: flex;
+            align-items: center;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 0 12px;
+            margin-bottom: 8px;
+        }
+        .modern-nav .mobile-search input {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 14px;
+            padding: 12px 10px;
+            flex: 1;
+            outline: none;
+        }
+        .modern-nav .mobile-search input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+        .modern-nav .mobile-search button {
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.6);
+            cursor: pointer;
+            padding: 8px;
+        }
+        .modern-nav .mobile-search button svg {
+            width: 18px;
+            height: 18px;
+        }
+        /* Responsive */
+        @media (max-width: 991px) {
+            .modern-nav .nav-links,
+            .modern-nav .nav-search {
+                display: none;
+            }
+            .modern-nav .mobile-toggle {
+                display: flex;
+            }
+            .modern-nav .nav-container {
+                justify-content: space-between;
+            }
+        }
+        @media (min-width: 992px) {
+            .modern-nav .mobile-menu {
+                display: none !important;
+            }
+        }
+    </style>
 
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="<?php echo e(route('profile.index')); ?>">
-                                    <i class="fas fa-user"></i> Thông tin cá nhân
-                                </a></li>
-                                <li><a class="dropdown-item" href="<?php echo e(route('orders.index')); ?>">
-                                    <i class="fas fa-shopping-bag"></i> Đơn hàng của tôi
-                                </a></li>
-                                <?php if(Auth::user()->isAdmin() || (method_exists(Auth::user(), 'isStaff') && Auth::user()->isStaff())): ?>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="<?php echo e(route('admin.dashboard')); ?>">
-                                        <i class="fas fa-cogs"></i> Quản trị
-                                    </a></li>
-                                <?php endif; ?>
+    <nav class="modern-nav">
+        <div class="nav-container">
+            <!-- Logo -->
+            <a href="<?php echo e(route('home')); ?>" class="nav-brand">
+                <div class="brand-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M11.25 4.533A9.707 9.707 0 006 3a9.735 9.735 0 00-3.25.555.75.75 0 00-.5.707v14.25a.75.75 0 001 .707A8.237 8.237 0 016 18.75c1.995 0 3.823.707 5.25 1.886V4.533zM12.75 20.636A8.214 8.214 0 0118 18.75c.966 0 1.89.166 2.75.47a.75.75 0 001-.708V4.262a.75.75 0 00-.5-.707A9.735 9.735 0 0018 3a9.707 9.707 0 00-5.25 1.533v16.103z"/>
+                    </svg>
+                </div>
+                <span class="brand-text">BookStore</span>
+            </a>
+
+            <!-- Nav Links (Desktop) -->
+            <ul class="nav-links">
+                <li><a href="<?php echo e(route('home')); ?>" class="<?php echo e(request()->routeIs('home') ? 'active' : ''); ?>">Trang chủ</a></li>
+                <li><a href="<?php echo e(route('books.index')); ?>" class="<?php echo e(request()->routeIs('books.*') ? 'active' : ''); ?>">Sách</a></li>
+                <li><a href="<?php echo e(route('about')); ?>" class="<?php echo e(request()->routeIs('about') ? 'active' : ''); ?>">Giới thiệu</a></li>
+                <li><a href="<?php echo e(route('contact')); ?>" class="<?php echo e(request()->routeIs('contact') ? 'active' : ''); ?>">Liên hệ</a></li>
+            </ul>
+
+            <!-- Search Form (Desktop) -->
+            <form class="nav-search" method="GET" action="<?php echo e(route('books.index')); ?>">
+                <input type="search" name="search" placeholder="Tìm kiếm sách..." value="<?php echo e(request('search')); ?>">
+                <button type="submit">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                    </svg>
+                </button>
+            </form>
+
+            <!-- Right Actions -->
+            <div class="nav-actions">
+                <?php if(auth()->guard()->guest()): ?>
+                    <a href="<?php echo e(route('login')); ?>" class="auth-btn login">Đăng nhập</a>
+                    <a href="<?php echo e(route('register')); ?>" class="auth-btn register">Đăng ký</a>
+                <?php else: ?>
+                    <!-- Cart -->
+                    <a href="<?php echo e(route('cart.index')); ?>" class="nav-icon-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121 0 2.09-.773 2.345-1.867l1.807-7.748H5.25M6.75 21a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                        </svg>
+                        <span id="cartCount" class="cart-badge">0</span>
+                    </a>
+
+                    <!-- User Menu -->
+                    <div class="user-dropdown dropdown">
+                        <a href="#" class="user-btn" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="user-avatar"><?php echo e(strtoupper(substr(Auth::user()->name, 0, 1))); ?></div>
+                            <span><?php echo e(Auth::user()->name); ?></span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:14px;height:14px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                            </svg>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item" href="<?php echo e(route('profile.index')); ?>">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                                    </svg>
+                                    Thông tin cá nhân
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="<?php echo e(route('orders.index')); ?>">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                                    </svg>
+                                    Đơn hàng của tôi
+                                </a>
+                            </li>
+                            <?php if(Auth::user()->isAdmin() || (method_exists(Auth::user(), 'isStaff') && Auth::user()->isStaff())): ?>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
-                                    <a class="dropdown-item" href="<?php echo e(route('logout')); ?>"
-                                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                                    <a class="dropdown-item" href="<?php echo e(route('admin.dashboard')); ?>">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                        Quản trị
                                     </a>
-                                    <form id="logout-form" action="<?php echo e(route('logout')); ?>" method="POST" class="d-none">
-                                        <?php echo csrf_field(); ?>
-                                    </form>
                                 </li>
-                            </ul>
-                        </li>
-                    <?php endif; ?>
-                </ul>
+                            <?php endif; ?>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="<?php echo e(route('logout')); ?>"
+                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                                    </svg>
+                                    Đăng xuất
+                                </a>
+                                <form id="logout-form" action="<?php echo e(route('logout')); ?>" method="POST" class="d-none">
+                                    <?php echo csrf_field(); ?>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Mobile Toggle -->
+                <button class="mobile-toggle" onclick="toggleMobileMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div class="mobile-menu" id="mobileMenu">
+                <form class="mobile-search" method="GET" action="<?php echo e(route('books.index')); ?>">
+                    <input type="search" name="search" placeholder="Tìm kiếm sách..." value="<?php echo e(request('search')); ?>">
+                    <button type="submit">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                        </svg>
+                    </button>
+                </form>
+                <a href="<?php echo e(route('home')); ?>">Trang chủ</a>
+                <a href="<?php echo e(route('books.index')); ?>">Sách</a>
+                <a href="<?php echo e(route('about')); ?>">Giới thiệu</a>
+                <a href="<?php echo e(route('contact')); ?>">Liên hệ</a>
+                <?php if(auth()->guard()->guest()): ?>
+                    <a href="<?php echo e(route('login')); ?>">Đăng nhập</a>
+                    <a href="<?php echo e(route('register')); ?>">Đăng ký</a>
+                <?php endif; ?>
             </div>
         </div>
     </nav>
+
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('show');
+        }
+    </script>
 
     <!-- Alerts -->
     <?php if(session('success')): ?>
@@ -969,7 +1440,7 @@
     <?php endif; ?>
 
     <!-- Main Content -->
-    <main class="py-4">
+    <main class="py-0">
         <?php echo $__env->yieldContent('content'); ?>
     </main>
 
@@ -1076,5 +1547,657 @@
     </script>
     
     <?php echo $__env->yieldPushContent('scripts'); ?>
+
+    <!-- AI Chatbot Widget -->
+    <style>
+        /* Chatbot Container */
+        .chatbot-widget {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Chat Toggle Button */
+        .chatbot-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .chatbot-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(124, 58, 237, 0.5);
+        }
+
+        .chatbot-toggle svg {
+            width: 28px;
+            height: 28px;
+            color: #fff;
+        }
+
+        .chatbot-toggle .close-icon {
+            display: none;
+        }
+
+        .chatbot-widget.active .chatbot-toggle .chat-icon {
+            display: none;
+        }
+
+        .chatbot-widget.active .chatbot-toggle .close-icon {
+            display: block;
+        }
+
+        /* Notification Badge */
+        .chatbot-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 20px;
+            height: 20px;
+            background: #ef4444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: #fff;
+            animation: pulse-badge 2s infinite;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .chatbot-widget.active .chatbot-badge {
+            display: none;
+        }
+
+        /* Chat Window */
+        .chatbot-window {
+            position: absolute;
+            bottom: 75px;
+            right: 0;
+            width: 380px;
+            height: 520px;
+            background: #0f0f1a;
+            border-radius: 20px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.4);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .chatbot-widget.active .chatbot-window {
+            display: flex;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Chat Header */
+        .chatbot-header {
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .chatbot-avatar {
+            width: 42px;
+            height: 42px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chatbot-avatar svg {
+            width: 24px;
+            height: 24px;
+            color: #fff;
+        }
+
+        .chatbot-info h4 {
+            color: #fff;
+            font-size: 15px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .chatbot-info p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 12px;
+            margin: 2px 0 0;
+        }
+
+        .chatbot-status {
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 4px;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Chat Messages */
+        .chatbot-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            background: #0f0f1a;
+        }
+
+        .chatbot-messages::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .chatbot-messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chatbot-messages::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .chat-message {
+            display: flex;
+            gap: 10px;
+            max-width: 85%;
+        }
+
+        .chat-message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .chat-message .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .chat-message.bot .avatar {
+            background: linear-gradient(135deg, #7c3aed, #a855f7);
+        }
+
+        .chat-message.user .avatar {
+            background: #374151;
+        }
+
+        .chat-message .avatar svg {
+            width: 16px;
+            height: 16px;
+            color: #fff;
+        }
+
+        .chat-message .content {
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .chat-message.bot .content {
+            background: #1a1a2e;
+            color: rgba(255, 255, 255, 0.9);
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-message.user .content {
+            background: linear-gradient(135deg, #7c3aed, #a855f7);
+            color: #fff;
+            border-bottom-right-radius: 4px;
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 12px 16px;
+            background: #1a1a2e;
+            border-radius: 16px;
+            width: fit-content;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 100% { transform: translateY(0); opacity: 0.4; }
+            50% { transform: translateY(-4px); opacity: 1; }
+        }
+
+        /* Quick Actions */
+        .chatbot-quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 0 20px 16px;
+            background: #0f0f1a;
+        }
+
+        .quick-action-btn {
+            background: rgba(124, 58, 237, 0.15);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            color: #a855f7;
+            font-size: 12px;
+            padding: 8px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .quick-action-btn:hover {
+            background: rgba(124, 58, 237, 0.25);
+            border-color: #a855f7;
+        }
+
+        /* Chat Input */
+        .chatbot-input {
+            padding: 16px 20px;
+            background: #1a1a2e;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            background: #0f0f1a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: #fff;
+            font-size: 13px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .chatbot-input input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .chatbot-input input:focus {
+            border-color: rgba(124, 58, 237, 0.5);
+        }
+
+        .chatbot-input button {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #7c3aed, #a855f7);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .chatbot-input button:hover {
+            transform: scale(1.05);
+        }
+
+        .chatbot-input button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .chatbot-input button svg {
+            width: 20px;
+            height: 20px;
+            color: #fff;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 480px) {
+            .chatbot-widget {
+                bottom: 16px;
+                right: 16px;
+            }
+
+            .chatbot-window {
+                width: calc(100vw - 32px);
+                height: calc(100vh - 140px);
+                max-height: 500px;
+                right: 0;
+            }
+
+            .chatbot-toggle {
+                width: 54px;
+                height: 54px;
+            }
+        }
+    </style>
+
+    <!-- Chatbot HTML -->
+    <div class="chatbot-widget" id="chatbotWidget">
+        <!-- Toggle Button -->
+        <button class="chatbot-toggle" onclick="toggleChatbot()">
+            <svg class="chat-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" />
+            </svg>
+            <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            <span class="chatbot-badge">1</span>
+        </button>
+
+        <!-- Chat Window -->
+        <div class="chatbot-window">
+            <!-- Header -->
+            <div class="chatbot-header">
+                <div class="chatbot-avatar">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+                    </svg>
+                </div>
+                <div class="chatbot-info">
+                    <h4>BookStore AI</h4>
+                    <p><span class="chatbot-status"></span>Trợ lý sách thông minh</p>
+                </div>
+            </div>
+
+            <!-- Messages -->
+            <div class="chatbot-messages" id="chatMessages">
+                <div class="chat-message bot">
+                    <div class="avatar">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+                        </svg>
+                    </div>
+                    <div class="content">
+                        Xin chào! 👋 Tôi là trợ lý AI của BookStore. Tôi có thể giúp bạn tìm sách, gợi ý sách hay, hoặc trả lời các câu hỏi về đơn hàng. Bạn cần hỗ trợ gì?
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="chatbot-quick-actions">
+                <button class="quick-action-btn" onclick="sendQuickMessage('Gợi ý sách hay')">📚 Sách hay</button>
+                <button class="quick-action-btn" onclick="sendQuickMessage('Sách bán chạy')">🔥 Bán chạy</button>
+                <button class="quick-action-btn" onclick="sendQuickMessage('Cách đặt hàng')">🛒 Đặt hàng</button>
+                <button class="quick-action-btn" onclick="sendQuickMessage('Liên hệ hỗ trợ')">💬 Hỗ trợ</button>
+            </div>
+
+            <!-- Input -->
+            <div class="chatbot-input">
+                <input type="text" id="chatInput" placeholder="Nhập tin nhắn..." onkeypress="handleKeyPress(event)">
+                <button onclick="sendMessage()" id="sendBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chatbot Script -->
+    <script>
+        const GEMINI_API_KEY = 'AIzaSyDxRnAyk1RJT4Kt29jM10Jw67zUYgyTUxM';
+        const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+        
+        let chatHistory = [];
+        let isProcessing = false;
+
+        const SYSTEM_PROMPT = `Bạn là trợ lý AI thông minh của BookStore - một cửa hàng sách trực tuyến tại Việt Nam.
+
+Nhiệm vụ của bạn:
+- Giúp khách hàng tìm kiếm và gợi ý sách phù hợp
+- Trả lời câu hỏi về sách, tác giả, thể loại
+- Hướng dẫn cách đặt hàng, thanh toán, vận chuyển
+- Giải đáp các thắc mắc về chính sách đổi trả, bảo hành
+- Gợi ý sách theo sở thích, độ tuổi, mục đích đọc
+
+Thông tin cửa hàng:
+- Tên: BookStore
+- Địa chỉ: Tân Bình, TP.HCM
+- Điện thoại: 0343935487
+- Email: hoquy902@gmail.com
+- Miễn phí vận chuyển cho đơn từ 300.000đ
+- Đổi trả trong 7 ngày nếu sách lỗi
+
+Cách đặt hàng:
+1. Chọn sách muốn mua và thêm vào giỏ hàng
+2. Vào giỏ hàng, kiểm tra và nhấn "Thanh toán"
+3. Điền thông tin giao hàng
+4. Chọn phương thức thanh toán (COD hoặc chuyển khoản)
+5. Xác nhận đơn hàng
+
+Hãy trả lời ngắn gọn, thân thiện, bằng tiếng Việt. Sử dụng emoji phù hợp.`;
+
+        function toggleChatbot() {
+            const widget = document.getElementById('chatbotWidget');
+            widget.classList.toggle('active');
+            
+            if (widget.classList.contains('active')) {
+                document.getElementById('chatInput').focus();
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        function sendQuickMessage(message) {
+            document.getElementById('chatInput').value = message;
+            sendMessage();
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message || isProcessing) return;
+            
+            isProcessing = true;
+            input.value = '';
+            document.getElementById('sendBtn').disabled = true;
+
+            // Add user message to chat
+            addMessage(message, 'user');
+            
+            // Add to history
+            chatHistory.push({ role: 'user', parts: [{ text: message }] });
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            try {
+                const response = await callGeminiAPI(message);
+                removeTypingIndicator();
+                addMessage(response, 'bot');
+                chatHistory.push({ role: 'model', parts: [{ text: response }] });
+            } catch (error) {
+                removeTypingIndicator();
+                addMessage('Xin lỗi, có lỗi xảy ra. Vui lòng thử lại sau! 😔', 'bot');
+                console.error('Chatbot error:', error);
+            }
+
+            isProcessing = false;
+            document.getElementById('sendBtn').disabled = false;
+        }
+
+        async function callGeminiAPI(userMessage) {
+            // Build contents array with system instruction embedded in first user message
+            const contents = [];
+            
+            // Add history (last 6 messages for context)
+            const recentHistory = chatHistory.slice(-6);
+            recentHistory.forEach(msg => {
+                contents.push({
+                    role: msg.role,
+                    parts: msg.parts
+                });
+            });
+
+            // Add current message with system prompt if first message
+            if (contents.length === 0) {
+                contents.push({
+                    role: 'user',
+                    parts: [{ text: SYSTEM_PROMPT + '\n\nKhách hàng: ' + userMessage }]
+                });
+            } else {
+                contents.push({
+                    role: 'user',
+                    parts: [{ text: userMessage }]
+                });
+            }
+
+            try {
+                const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: contents,
+                        generationConfig: {
+                            temperature: 0.8,
+                            topK: 40,
+                            topP: 0.95,
+                            maxOutputTokens: 800,
+                        }
+                    })
+                });
+
+                const data = await response.json();
+                console.log('Gemini response:', data);
+
+                if (!response.ok) {
+                    console.error('API Error:', data);
+                    throw new Error(data.error?.message || 'API request failed');
+                }
+                
+                if (data.candidates && data.candidates[0] && data.candidates[0].content) {
+                    return data.candidates[0].content.parts[0].text;
+                }
+                
+                if (data.error) {
+                    throw new Error(data.error.message);
+                }
+                
+                throw new Error('Invalid response format');
+            } catch (error) {
+                console.error('Fetch error:', error);
+                throw error;
+            }
+        }
+
+        function addMessage(text, sender) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${sender}`;
+            
+            const avatarSvg = sender === 'bot' 
+                ? `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+                   </svg>`
+                : `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                   </svg>`;
+
+            messageDiv.innerHTML = `
+                <div class="avatar">${avatarSvg}</div>
+                <div class="content">${formatMessage(text)}</div>
+            `;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function formatMessage(text) {
+            // Convert markdown-like formatting to HTML
+            return text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/\n/g, '<br>');
+        }
+
+        function showTypingIndicator() {
+            const messagesContainer = document.getElementById('chatMessages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'chat-message bot';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                <div class="avatar">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+                    </svg>
+                </div>
+                <div class="typing-indicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            `;
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const typing = document.getElementById('typingIndicator');
+            if (typing) {
+                typing.remove();
+            }
+        }
+    </script>
 </body>
 </html><?php /**PATH C:\xampp\htdocs\webbansach\laravel-app\resources\views/layouts/frontend.blade.php ENDPATH**/ ?>

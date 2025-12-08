@@ -97,7 +97,16 @@ if ($banner) {
     .banner-img { height: min(460px, 60vh); }
     @media (max-width:1200px) { .banner-img { height: min(420px, 55vh); } }
     @media (max-width:992px) { .banner-img { height: min(360px, 50vh); } }
-    @media (max-width:768px) { .banner-img { height: auto; padding:10px; object-fit:contain; } .banner-card { border-radius:8px; } }
+    @media (max-width:768px) { 
+        .banner-img { height: auto; max-height: 280px; padding:8px; object-fit:contain; } 
+        .banner-card { border-radius:8px; margin: 0 8px; }
+        .hero-section { padding: 1.5rem 0 !important; }
+    }
+    @media (max-width:575px) { 
+        .banner-img { max-height: 220px; padding: 6px; }
+        .banner-card { border-radius: 6px; margin: 0 4px; }
+        .hero-section { padding: 1rem 0 !important; }
+    }
 
     /* Caption: hidden by default on pointer devices, visible on hover/focus with smooth animation */
     .banner-caption { opacity:0; transform: translateY(8px); transition: opacity .28s ease, transform .36s cubic-bezier(.2,.9,.2,1); pointer-events:none; }
@@ -105,8 +114,81 @@ if ($banner) {
 
     /* On small screens, make caption flow below image (no overlay) for readability */
     @media (max-width:768px) {
-        .banner-caption { position:relative !important; left:auto !important; bottom:auto !important; width:100% !important; max-width:100% !important; padding:12px !important; margin-top:-6px; border-radius:0 0 6px 6px !important; opacity:1 !important; transform:none !important; pointer-events:auto !important; }
+        .banner-caption { 
+            position:relative !important; 
+            left:auto !important; 
+            bottom:auto !important; 
+            width:100% !important; 
+            max-width:100% !important; 
+            padding:10px !important; 
+            margin-top:-6px; 
+            border-radius:0 0 6px 6px !important; 
+            opacity:1 !important; 
+            transform:none !important; 
+            pointer-events:auto !important;
+            background: rgba(14,42,71,0.9) !important;
+        }
+        .banner-caption h3 {
+            font-size: 1rem !important;
+        }
+        .banner-caption p {
+            font-size: 0.85rem !important;
+        }
         .carousel-indicators { bottom: 6px; }
+    }
+    @media (max-width:575px) {
+        .banner-caption {
+            padding: 8px !important;
+        }
+        .banner-caption h3 {
+            font-size: 0.9rem !important;
+        }
+        .banner-caption p {
+            font-size: 0.8rem !important;
+            margin-bottom: 6px !important;
+        }
+        .banner-caption .btn {
+            font-size: 11px;
+            padding: 4px 10px;
+        }
+    }
+    
+    /* Carousel controls responsive */
+    @media (max-width:768px) {
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: 30px;
+        }
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            width: 16px;
+            height: 16px;
+        }
+    }
+    @media (max-width:575px) {
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: 24px;
+        }
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            width: 12px;
+            height: 12px;
+        }
+        .carousel-indicators {
+            margin-bottom: 4px;
+        }
+        .carousel-indicators button {
+            width: 20px;
+            height: 3px;
+        }
+    }
+    
+    /* Decorative shapes - hide on mobile for performance */
+    @media (max-width:768px) {
+        .banner-shape {
+            display: none;
+        }
     }
 </style>
 

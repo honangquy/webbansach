@@ -28,6 +28,28 @@
             }
         }
 
+        /* Ensure modals and popups are always clickable - override any animation issues */
+        .modal,
+        .modal-dialog,
+        .modal-content,
+        .modal-backdrop,
+        .dropdown-menu,
+        .popover,
+        .tooltip,
+        [role="dialog"],
+        [aria-modal="true"] {
+            animation: none !important;
+            pointer-events: auto !important;
+        }
+        
+        .modal.show {
+            pointer-events: auto !important;
+        }
+        
+        .modal-backdrop.show {
+            pointer-events: auto !important;
+        }
+
         /* Inter font for text elements - preserve icon fonts */
         body, html {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
